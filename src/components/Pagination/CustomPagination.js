@@ -4,8 +4,6 @@ import { Pagination } from '@mui/material';
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
 
-
-
 const CustomPagination = ({
 	setPage,
 	numOfPages=10
@@ -18,9 +16,10 @@ const CustomPagination = ({
 	});
 
 	const handlePageChange = (page) => {
-		setPage(page);
+		setPage(parseInt(page - 1, 10));
 		window.scroll(0,0);
 	};
+
 	return (
 		<div
 			style={{
@@ -35,10 +34,9 @@ const CustomPagination = ({
 					onChange={(e) => handlePageChange(e.target.textContent)}
 					hideNextButton
 					hidePrevButton
-					color='primary'
+					color='secondary'
 				/>
 			</ThemeProvider>
-			
 		</div>
 	);
 };
