@@ -15,20 +15,19 @@
     color: black;    
 }
 
-
 @media(max-width: 550px){
     .media{
         width: 46%;
     }
 }
 
-.poster{
-    border-radius: 10px;
+.image{
+    border-radius: 8px;
 }
 
 .title{
     width: 100%;
-    text-align: center;
+    text-align: left;
     font-size: 17px;
     padding: 9px 0;
 }

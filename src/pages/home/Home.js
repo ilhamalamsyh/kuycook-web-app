@@ -1,43 +1,77 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import SingleContent from '../../components/SingleContent/SingleContent';
 import './styles/home.css';
 import CustomPagination from '../../components/Pagination/CustomPagination';
-
+import { useQuery } from '@apollo/client';
+import RECIPE_LIST from './service/recipe_query';
+import {Loading} from '../../components/Loading/Loading';
+import { ErrorSnackbar } from '../../components/Snackbar/CustomizedSnackbars';
 
 const Home = () => {
-	const [page, setPage] = useState(1);
+	
+	const [page, setPage] = useState(0);
 	const [content, setContent] = useState([]);
-
-	const fetchHome = async () => {
-		const {data} = await axios.get(`https://api.themoviedb.org/3/trending/all/day?api_key=${process.env.REACT_APP_API_KEY}&page=${page}`);
-		setContent(data.results);
-		console.log('data: ', data.results);
-	};
+	const {loading, error, data} = useQuery(RECIPE_LIST,{
+		variables: {
+			page
+		}
+	});	
+	
+	const [loadPage, setLoadPage] = useState(loading);
 
 	useEffect(() => {
-		fetchHome();
-	},[page]);
+		if (data) {
+			setContent(data);	
+		}
 
+		const timer = setTimeout(() => {
+			setLoadPage(false);
+		}, 1000);
+		return () => clearTimeout(timer);
+	},[page,data]);
 	return (
-		<div>
-			<span className='page-title'>Home</span>
-			<div className='home'>
-				{
-					content && content.map((c) => <SingleContent 
-						key={c.id}
-						id={c.id}
-						title={c.title || c.name}
-						poster={c.poster_path}
-						date={c.first_air_date || c.release_date}
-						media_type={c.media_type}
-						vote_average={c.vote_average}
-					/>)
-				}
-			</div>
-			<CustomPagination setPage={setPage}/>
-		</div>
-		
+		<>
+			{
+			loadPage ? <Loading>
+				<div>
+					<span className='page-title'>Home</span>
+					<div className='home'>
+						{
+							content.recipeList && content.recipeList.map((c) => <SingleContent 
+								key={c.id}
+								id={c.id}
+								title={c.title}
+								image={c.image.url}
+								date={c.title}
+								media_type={c.title}
+								vote_average={c.servings}
+							/>)
+						}
+					</div>
+					<CustomPagination setPage={setPage}/>
+				</div>
+			</Loading>
+				: error ? <ErrorSnackbar message={error.message}/>
+					: <div>
+						<span className='page-title'>Home</span>
+						<div className='home'>
+							{
+								content.recipeList && content.recipeList.map((c) => <SingleContent 
+									key={c.id}
+									id={c.id}
+									title={c.title}
+									image={c.image.url}
+									date={c.title}
+									servings={c.servings}
+									cooking_time={c.cookingTime}
+								/>)
+							}
+						</div>
+						<CustomPagination setPage={setPage}/>
+					</div>
+			} 
+		</>
 	);
 };
 
