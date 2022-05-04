@@ -2,29 +2,30 @@
 /* eslint-disable react/prop-types */
 import { Badge } from '@mui/material';
 import React from 'react';
-import { img_300, unavailable } from '../../config/config';
+import { useHistory } from 'react-router-dom';
+import { unavailable } from '../../config/config';
 import './styles/single_content.css';
 
 const SingleContent = ({
 	id, 
-	poster,
+	image,
 	title,
-	date,
-	media_type,
-	vote_average
+	servings,
+	cooking_time,
 }) => {
+	const history = useHistory();
+
 	return (
-		<div className='media'>
-			<Badge badgeContent={vote_average} color={vote_average > 6 ? 'primary' : 'secondary'} />
+		<div onClick={() => history.push(`recipes/${id}`)} className='media'>
+			<Badge sx={{marginRight: 3.3}} badgeContent={cooking_time} color={cooking_time > 6 ? 'primary' : 'secondary'} />
 			<img
-				className='poster'
-				src={ poster ? `${img_300}/${poster}` : unavailable}
+				className='image'
+				src={ image ? `${image}` : unavailable}
 				alt={title}
 			/>
 			<b className='title'>{title}</b>
 			<span className='sub-title'>
-				{media_type === 'tv' ? 'TV Series' : 'Movie'}
-				<span className='sunTitle'>{date} </span>
+				{servings}
 			</span>
 		</div>
 	);
