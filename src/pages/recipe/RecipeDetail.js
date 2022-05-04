@@ -21,7 +21,7 @@ const RecipeDetail = () => {
 	useEffect(async () => {
 		const timer = setTimeout(async () => {
 			await setLoadPage(false);
-		}, 5000);
+		}, 1000);
 		return () => clearTimeout(timer);
 	},[data]);
 

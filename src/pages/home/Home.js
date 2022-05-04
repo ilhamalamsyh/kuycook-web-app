@@ -27,7 +27,7 @@ const Home = () => {
 
 		const timer = setTimeout(() => {
 			setLoadPage(false);
-		}, 500);
+		}, 1000);
 		return () => clearTimeout(timer);
 	},[page,data]);
 	return (
