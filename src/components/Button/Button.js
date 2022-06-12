@@ -8,10 +8,10 @@ const PrimaryButton = (props) => {
 	);
 };
 
-const DangerButton = (props) => {
+const DefaultButton = (props) => {
 	return(
-		<button className='btn danger'>{props.title}</button>
+		<button className='btn default'>{props.title}</button>
 	);
 };
 
-export {PrimaryButton, DangerButton};
+export {PrimaryButton, DefaultButton};

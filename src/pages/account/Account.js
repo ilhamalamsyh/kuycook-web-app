@@ -1,6 +1,6 @@
 import React from 'react';
-import { Avatar, List, ListItemButton, ListItemText } from '@mui/material';
-import {PrimaryButton, DangerButton} from '../../components/Button/Button';
+import { Avatar, List, ListItemButton, ListItemText, Typography } from '@mui/material';
+import {PrimaryButton, DefaultButton} from '../../components/Button/Button';
 import { ArrowForwardIosRounded } from '@mui/icons-material';
 
 const Account = () => {
@@ -20,23 +20,32 @@ const Account = () => {
 					dense
 				>
 					<ListItemButton>
-						<ListItemText sx={{fontSize: 25, fontWeight: 'bold'}}>Favorites</ListItemText>
+						<ListItemText 
+							disableTypography
+							primary={<Typography style={{color: 'white', fontWeight: 'bold'}}>Favorites</Typography>}
+						/>
 						<ArrowForwardIosRounded/>
 					</ListItemButton>
 					<hr />
 					<ListItemButton>
-						<ListItemText>My Recipes</ListItemText>
+						<ListItemText 
+							disableTypography
+							primary={<Typography style={{color: 'white', fontWeight: 'bold'}}>My Recipes</Typography>}
+						/>
 						<ArrowForwardIosRounded/>
 					</ListItemButton>
 					<hr />
 					<ListItemButton>
-						<ListItemText sx={{fontWeight: 20}}>About</ListItemText>
+						<ListItemText 
+							disableTypography
+							primary={<Typography style={{color: 'white', fontWeight: 'bold'}}>About</Typography>}
+						/>
 						<ArrowForwardIosRounded/>
 					</ListItemButton>
 					<hr />
 				</List>
-				<div style={{paddingLeft: 13}}>
-					<DangerButton title='Logout'/>
+				<div style={{paddingLeft: 17}}>
+					<DefaultButton title='Logout'/>
 				</div>
 				<center>
 					<p style={{marginTop: 90}}>v1.0.0</p>
