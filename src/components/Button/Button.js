@@ -10,7 +10,7 @@ const PrimaryButton = (props) => {
 
 const DefaultButton = (props) => {
 	return(
-		<button className='btn default'>{props.title}</button>
+		<button onClick={props.handlingEvents} className='btn default'>{props.title}</button>
 	);
 };
 

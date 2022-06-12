@@ -54,7 +54,6 @@ const Home = () => {
 			</Loading>
 				: error ? <ErrorSnackbar message={error.message}/>
 					: <div>
-						<span className='page-title'>Home</span>
 						<div className='home'>
 							{
 								content.recipeList && content.recipeList.map((c) => <SingleContent 
