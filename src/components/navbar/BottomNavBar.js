@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, {useState, useEffect} from 'react';
 
-import { AddBoxRounded, HomeOutlined, PersonOutlined } from '@mui/icons-material';
+import { AddBoxRounded, AddCircleOutlineOutlined, AddCircleOutlineRounded, HomeOutlined, HomeRounded, PersonOutlined, PersonOutlineRounded, PersonPinCircleOutlined, PersonPinCircleRounded, PersonRounded } from '@mui/icons-material';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 // import { BottomNavigation, BottomNavigationAction } from '@mui/material';
@@ -60,7 +60,7 @@ const BottomNavBar = () => {
 			<BottomNavigationAction 
 				style={{color:'#ff10ef'}} 
 				label="Home" 
-				icon={<HomeOutlined />} />
+				icon={<HomeRounded />} />
 			<BottomNavigationAction 
 				style={{color:'#ff10ef'}}  
 				label='Add' 
@@ -68,7 +68,7 @@ const BottomNavBar = () => {
 			<BottomNavigationAction 
 				style={{color:'#ff10ef'}}  
 				label="Account" 
-				icon={<PersonOutlined />} />
+				icon={<PersonRounded />} />
 		</BottomNavigation>
 		// 	</Paper>
 		// </Box>
