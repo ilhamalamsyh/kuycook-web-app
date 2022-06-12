@@ -77,8 +77,8 @@ const Account = () => {
 					<DialogContentText id='alert-dialog-description' sx={{color: 'white'}}>Are you sure want to logout?</DialogContentText>
 				</DialogTitle>
 				<DialogActions>
-					<Button color='primary' onClick={handleClickClose}>No</Button>
 					<Button color='error' onClick={handleClickClose}>Yes</Button>
+					<Button color='primary' onClick={handleClickClose}>No</Button>
 				</DialogActions>
 			</Dialog>
 		</>
