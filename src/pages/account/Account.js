@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { Avatar, Button, Dialog, DialogActions, DialogContentText, DialogTitle, List, ListItemButton, ListItemText, Typography } from '@mui/material';
 import {PrimaryButton, DefaultButton} from '../../components/Button/Button';
 import { ArrowForwardIosRounded } from '@mui/icons-material';
+import { useHistory } from 'react-router-dom';
+
 
 const Account = () => {
 	const [open, setOpen] = useState(false);
+	const history = useHistory();
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -12,6 +15,18 @@ const Account = () => {
 
 	const handleClickClose = () => {
 		setOpen(false);
+	};
+
+	const redirectMyRecipesPage = () => {
+		history.push('/recipes');
+	};
+
+	const redirectFavoritesPage = () => {
+		history.push('/');
+	};
+
+	const redirectAboutPage = () => {
+		history.push('/about');
 	};
 
 	return (
@@ -29,7 +44,7 @@ const Account = () => {
 				<List
 					dense
 				>
-					<ListItemButton>
+					<ListItemButton onClick={redirectFavoritesPage}>
 						<ListItemText 
 							disableTypography
 							primary={<Typography style={{color: 'white', fontWeight: 'bold'}}>Favorites</Typography>}
@@ -37,7 +52,7 @@ const Account = () => {
 						<ArrowForwardIosRounded/>
 					</ListItemButton>
 					<hr />
-					<ListItemButton>
+					<ListItemButton onClick={redirectMyRecipesPage}>
 						<ListItemText 
 							disableTypography
 							primary={<Typography style={{color: 'white', fontWeight: 'bold'}}>My Recipes</Typography>}
@@ -45,7 +60,7 @@ const Account = () => {
 						<ArrowForwardIosRounded/>
 					</ListItemButton>
 					<hr />
-					<ListItemButton>
+					<ListItemButton onClick={redirectAboutPage}>
 						<ListItemText 
 							disableTypography
 							primary={<Typography style={{color: 'white', fontWeight: 'bold'}}>About</Typography>}

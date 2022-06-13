@@ -19,6 +19,7 @@ import {
 
 import {onError} from '@apollo/client/link/error';
 import RecipeDetail from './pages/recipe/RecipeDetail';
+import About from './pages/about/About';
 
 const errorLink = onError(({graphqlErrors, networkErrors}) => {
 	if (graphqlErrors) {
@@ -50,6 +51,7 @@ const App = () => {
 							<Route exact path='/recipes' component={Recipe} />
 							<Route exact path='/recipes/:id' component={RecipeDetail } />
 							<Route path='/account' component={Account} />
+							<Route path='/about' component={About} />
 						</Switch>
 					</Container>
 				</div>
