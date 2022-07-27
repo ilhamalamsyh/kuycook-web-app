@@ -32,7 +32,7 @@ const useStyles = makeStyles({
 
 const BottomNavBar = () => {
 	const classes = useStyles();
-	const [value, setValue] = useState(0);
+	const [value, setValue] = useState();
 	const history = useHistory();
 	
 	useEffect(() => {

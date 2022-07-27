@@ -8,10 +8,14 @@ const userReducer = (state, action) => {
 	switch(action.type){
 	case 'LOGIN_SUCCESS':
 		return {...state, isAuthenticated: true};
-	case 'SIGN_OUT_SUCCESS':
+	case 'LOGOUT_SUCCESS':
 		return {...state, isAuthenticated: false};
 	case 'LOGIN_FAILURE':
 		return{...state, isAuthenticated: false};
+	case 'REGISTER_SUCCESS':
+		return {...state, isAuthenticated: true};
+	case 'REGISTER_FAILURE':
+		return {...state, isAuthenticated: false};
 	default: {
 		throw new Error(`Unhandled action type: ${action.type}`);
 	}		
