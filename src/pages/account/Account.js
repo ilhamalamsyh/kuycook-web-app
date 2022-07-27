@@ -1,13 +1,17 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import { Avatar, Button, Dialog, DialogActions, DialogContentText, DialogTitle, List, ListItemButton, ListItemText, Typography } from '@mui/material';
 import {PrimaryButton, DefaultButton} from '../../components/Button/Button';
 import { ArrowForwardIosRounded } from '@mui/icons-material';
 import { useHistory } from 'react-router-dom';
+import { useUserDispatch } from '../../context/UserContext';
 
 
-const Account = () => {
+const Account = (props) => {
 	const [open, setOpen] = useState(false);
 	const history = useHistory();
+	
+	let userDispatch = useUserDispatch();
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -27,6 +31,12 @@ const Account = () => {
 
 	const redirectAboutPage = () => {
 		history.push('/about');
+	};
+
+	const handleLogout = (dispatch, history) => {
+		localStorage.removeItem('user');
+		dispatch({type: 'LOGOUT_SUCCESS'});
+		history.push('/login');
 	};
 
 	return (
@@ -92,7 +102,7 @@ const Account = () => {
 					<DialogContentText id='alert-dialog-description' sx={{color: 'white'}}>Are you sure want to logout?</DialogContentText>
 				</DialogTitle>
 				<DialogActions>
-					<Button color='error' onClick={handleClickClose}>Yes</Button>
+					<Button color='error' onClick={() => handleLogout(userDispatch, props.history)}>Yes</Button>
 					<Button color='primary' onClick={handleClickClose}>No</Button>
 				</DialogActions>
 			</Dialog>
