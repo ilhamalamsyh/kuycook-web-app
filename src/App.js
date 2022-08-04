@@ -20,11 +20,15 @@ import {
 	InMemoryCache,
 	ApolloProvider,
 	HttpLink,
-	from
+	from,
+	createHttpLink
 } from '@apollo/client';
+
+import { setContext } from '@apollo/client/link/context';
 
 import {onError} from '@apollo/client/link/error';
 import { useUserDispatch, useUserState } from './context/UserContext';
+import { ProfileDetail } from './pages/profile/ProfileDetail';
 
 
 const errorLink = onError(({graphqlErrors, networkErrors}) => {
@@ -40,15 +44,39 @@ const link = from([
 	new HttpLink({uri: `${process.env.REACT_APP_GRAPHQL_API}`})
 ]);
 
-const client = new ApolloClient({
-	cache: new InMemoryCache,
-	link
+const httpLinks = createHttpLink({
+	uri: `${process.env.REACT_APP_GRAPHQL_API}`
 });
 
+const authLink = setContext((_, { headers }) => {
 
-const isAuth = false;
+	// get the authentication token from local storage if it exists
+  
+	const token = localStorage.getItem('token');
+  
+	// return the headers to the context so httpLink can read them
+  
+	return {
+  
+		headers: {
+  
+			...headers,
+  
+			authorization: token ? `${token}` : '',
+  
+		}
+  
+	};
+  
+});
 
-
+const client = new ApolloClient({
+	link: authLink.concat(httpLinks),
+	cache: new InMemoryCache(),
+	// headers: {
+	// 	authorization: localStorage.getItem('token') || '',
+	// }
+});
 
 const App = () => {
 	var { isAuthenticated } = useUserState();
@@ -106,6 +134,7 @@ const App = () => {
 							<Route exact path='/login' component={Login} />
 							<Route exact path='/signup' component={SignUp} />
 							<Route exact path='/recipes/:id' component={RecipeDetail } />
+							<Route exact path='/profile-detail' component={ProfileDetail} />
 							{/* <PublicRoute path='login' component={Login}/> */}
 							{/* <Route path='/account' component={Account} />
 							<Route path='/about' component={About} /> */}

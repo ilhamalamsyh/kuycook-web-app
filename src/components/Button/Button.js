@@ -1,10 +1,14 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import './style.css';
 
+
+
 const PrimaryButton = (props) => {
+	let history = useHistory();
 	return (
-		<button className='btn primary'>{props.title}</button>
+		<button onClick={() => {history.push(props.href);}} className='btn primary'>{props.title}</button>
 	);
 };
 
