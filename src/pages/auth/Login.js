@@ -48,6 +48,7 @@ const Login = (props) => {
 					}
 				}).then(response => {
 					localStorage.setItem('user',JSON.stringify(response.data));
+					localStorage.setItem('token', response.data.login.token);
 					setError(null);
 					setIsLoading(false);
 					dispatch({type: 'LOGIN_SUCCESS'});
