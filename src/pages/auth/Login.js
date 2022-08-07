@@ -49,7 +49,7 @@ const Login = (props) => {
 				}).then(response => {
 					localStorage.setItem('user',JSON.stringify(response.data));
 					localStorage.setItem('token', response.data.login.token);
-					setError(null);
+					setError(false);
 					setIsLoading(false);
 					dispatch({type: 'LOGIN_SUCCESS'});
 					history.push('/');
@@ -61,7 +61,7 @@ const Login = (props) => {
 					setErrMsg(err.message);
 					handleClick();
 				});
-			}, 2000);
+			}, 1000);
 		}
 	};
 

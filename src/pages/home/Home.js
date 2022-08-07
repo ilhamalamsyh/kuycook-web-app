@@ -7,11 +7,17 @@ import { useQuery } from '@apollo/client';
 import RECIPE_LIST from './service/recipe_query';
 import {Loading} from '../../components/Loading/Loading';
 import { ErrorSnackbar } from '../../components/Snackbar/CustomizedSnackbars';
+import { checkExpiredToken } from '../../utils/checkExpiredToken';
+import { useUserDispatch } from '../../context/UserContext';
+import { useHistory } from 'react-router-dom';
 
 const Home = () => {
-	
+	let token;
+	let userDispatch = useUserDispatch();
+	const history = useHistory();
 	const [page, setPage] = useState(0);
 	const [content, setContent] = useState([]);
+	const [message, setMessage] = useState('');
 	const {loading, error, data} = useQuery(RECIPE_LIST,{
 		variables: {
 			page
@@ -20,16 +26,37 @@ const Home = () => {
 	
 	const [loadPage, setLoadPage] = useState(loading);
 
+	const errorHandling = async(error) => {
+		setMessage('Something went wrong....');
+
+		if (error.networkError === null) {
+			await setMessage(error.graphQLErrors[0].message);
+			await checkExpiredToken(token, userDispatch, history);
+		}
+
+		if (error.networkError.result.errors[0].extensions.code === 'UNAUTHENTICATED') {
+			setMessage('Token Expired');
+			token = localStorage.removeItem('token');
+			localStorage.removeItem('user');
+			setTimeout(() => { 
+				checkExpiredToken(token, userDispatch, history);
+			}, 2000);
+		}
+	};
+
 	useEffect(() => {
 		if (data) {
 			setContent(data);	
 		}
-
 		const timer = setTimeout(() => {
 			setLoadPage(false);
 		}, 1000);
+		if (error) {
+			return errorHandling(error);
+		}
 		return () => clearTimeout(timer);
-	},[page,data]);
+	},[page, data, error]);
+
 	return (
 		<>
 			{
@@ -52,7 +79,7 @@ const Home = () => {
 					<CustomPagination setPage={setPage}/>
 				</div>
 			</Loading>
-				: error ? <ErrorSnackbar message={error.message}/>
+				: error ? <ErrorSnackbar message={message}/>
 					: <div>
 						<div className='home'>
 							{

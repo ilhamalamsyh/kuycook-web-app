@@ -13,6 +13,9 @@ import { Box } from '@mui/system';
 import { formatDate } from '../../../utils/formatDate';
 import { useMutation } from '@apollo/client';
 import { USER_UPDATE } from '../services/mutations';
+import { useUserDispatch } from '../../../context/UserContext';
+import { useHistory } from 'react-router-dom';
+import { checkExpiredToken } from '../../../utils/checkExpiredToken';
 
 export const EditProfileForm = ({
 	id,
@@ -49,12 +52,16 @@ export const EditProfileForm = ({
 		{value: 'F', label: 'Female'}
 	];
 
-	const [userUpdate] = useMutation(USER_UPDATE);
+	let token;
+	let userDispatch = useUserDispatch();
+	const history = useHistory();
+
+	const [userUpdate, {error}] = useMutation(USER_UPDATE);
 
 	const today = new Date();
 
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState(false);
+	const [err, setError] = useState(false);
 	const [success, setSuccess] = useState(false);
 	const [message, setMessage] = useState('');
 
@@ -77,7 +84,7 @@ export const EditProfileForm = ({
 		setSuccess(false);
 	};
 
-	const handleUserUpdate = async (setLoading, setError, values) => {
+	const handleUserUpdate = async (setLoading, setError, values, token, dispatch, history) => {
 		setError(false);
 		setLoading(true);
         
@@ -101,7 +108,36 @@ export const EditProfileForm = ({
 				setError(true);
 				setLoading(false);
 				setMessage(err.message);
-				handleSnackBarClick(false, true);
+				handleSnackBarClick(false, true);	
+
+				if (err.networkError === null ) {
+					setError(true);
+					setLoading(false);
+					setMessage(err.message);
+					handleSnackBarClick(false, true);	
+					localStorage.removeItem('user');
+					token = localStorage.removeItem('token');
+					setTimeout(() => {
+						checkExpiredToken(token, dispatch, history);
+					}, 2000);
+				}
+				if (err.networkError.result.errors[0].extensions.code === 'UNAUTHENTICATED') {
+					setMessage('Token Expired');
+					localStorage.removeItem('user');
+					token = localStorage.removeItem('token');
+					setError(true);
+					setLoading(false);
+					handleSnackBarClick(false, true);
+					setTimeout(() => {
+						checkExpiredToken(token, dispatch, history);
+					}, 2000);
+				}
+				if (err.networkError.result.errors[0].extensions.code === 'INTERNAL_SERVER_ERROR') {
+					setError(true);
+					setLoading(false);
+					setMessage(err.networkError.result.errors[0].message);
+					handleSnackBarClick(false, true);		
+				}
 			});
 		}, 1000);
 	};
@@ -121,7 +157,7 @@ export const EditProfileForm = ({
 			birthDate
 		},
 		onSubmit: (values) => {
-			handleUserUpdate(setLoading, setError, values);
+			handleUserUpdate(setLoading, setError, values, token, userDispatch, history);
 		},
 		validationSchema,
 		enableReinitialize: true
@@ -226,7 +262,7 @@ export const EditProfileForm = ({
 			{
 				error ? <Stack spacing={2} sx={{width: '100%'}}>
 					<Snackbar 
-						open={error}
+						open={err}
 						autoHideDuration={3000}
 						onClose={handleSnackbarErrorClose}
 						anchorOrigin={{ vertical: 'bottom', horizontal:'right' }}
