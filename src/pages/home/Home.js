@@ -72,7 +72,7 @@ const Home = () => {
 								image={c.image.url}
 								date={c.title}
 								media_type={c.title}
-								vote_average={c.servings}
+								author={c.author}
 							/>)
 						}
 					</div>
@@ -89,7 +89,7 @@ const Home = () => {
 									title={c.title}
 									image={c.image.url}
 									date={c.title}
-									servings={c.servings}
+									author={c.author}
 									cooking_time={c.cookingTime}
 								/>)
 							}

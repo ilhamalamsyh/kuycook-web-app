@@ -17,6 +17,7 @@
     "axios": "^0.26.1",
     "date-fns": "^2.28.0",
     "formik": "^2.2.9",
+    "formik-mui": "^5.0.0-alpha.0",
     "framer-motion": "^6.3.0",
     "graphql": "^16.4.0",
     "moment": "^2.29.4",

@@ -7,6 +7,16 @@ const RECIPE_LIST = gql`
         title
         servings
         cookingTime
+        author {
+            id
+            fullname
+            gender
+            email
+            birthDate
+            createdAt
+            updatedAt
+            deletedAt
+        }
         instructions{
             id
             recipeId

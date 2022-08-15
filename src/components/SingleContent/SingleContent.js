@@ -10,7 +10,7 @@ const SingleContent = ({
 	id, 
 	image,
 	title,
-	servings,
+	author,
 	cooking_time,
 }) => {
 	const history = useHistory();
@@ -25,7 +25,7 @@ const SingleContent = ({
 			/>
 			<b className='title'>{title}</b>
 			<span className='sub-title'>
-				{servings}
+				Chef {author.fullname}
 			</span>
 		</div>
 	);
