@@ -29,7 +29,7 @@ import { setContext } from '@apollo/client/link/context';
 import {onError} from '@apollo/client/link/error';
 import { useUserDispatch, useUserState } from './context/UserContext';
 import { ProfileDetail } from './pages/profile/ProfileDetail';
-
+import { RecipeForm } from './pages/recipe/RecipeForm';
 
 const errorLink = onError(({graphqlErrors, networkErrors}) => {
 	if (graphqlErrors) {
@@ -133,6 +133,12 @@ const App = () => {
 							{/* <Route exact path='/recipes' component={Recipe} /> */}
 							<Route exact path='/login' component={Login} />
 							<Route exact path='/signup' component={SignUp} />
+							<PrivateRoute exact path='/recipes/create'>
+								<RecipeForm />
+							</PrivateRoute>
+							<PrivateRoute exact path='/recipes/:id/edit'>
+								<RecipeForm />
+							</PrivateRoute>
 							<Route exact path='/recipes/:id' component={RecipeDetail } />
 							<Route exact path='/profile-detail' component={ProfileDetail} />
 							{/* <PublicRoute path='login' component={Login}/> */}

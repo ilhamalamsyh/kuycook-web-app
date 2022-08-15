@@ -47,4 +47,35 @@ p{
     }
 }
 
+.image-button-container{
+    position: relative;
+    width: 100%;
+    justify-content: center;
+}
 
+.image-button-container img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+.image-button-container .add-recipe-button{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #555;
+    color: white;
+    font-size: 16px;
+    padding: 12px 14px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.image-button-container .add-recipe-button .add-recipe-button:hover{
+    background-color: black;
+}
+.add-ingredient-instruction-btn {
+    background-color: pink;
+}
