@@ -9,6 +9,16 @@ const RECIPE_DETAIL = gql `
     isFavorite
     servings
     cookingTime
+    author {
+      id
+      fullname
+      gender
+      email
+      birthDate
+      createdAt
+      updatedAt
+      deletedAt
+    }
     instructions{
       id
       instruction
