@@ -20,6 +20,7 @@ export const CREATE_RECIPE = gql`
             }
             image {
                 id
+                url
                 recipeId
             }
             isFavorite

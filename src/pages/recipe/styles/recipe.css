@@ -79,3 +79,17 @@ p{
 .add-ingredient-instruction-btn {
     background-color: pink;
 }
+.dropzone {
+    background: #eee;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8px;
+    padding: 20px;
+    cursor: pointer;
+    height: 150px;
+    width: 300px;
+    border: 2px dashed cyan;
+    outline: none;
+}

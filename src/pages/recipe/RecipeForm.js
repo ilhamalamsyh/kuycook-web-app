@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useUserDispatch } from '../../context/UserContext';
 import * as yup from 'yup';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Field, FieldArray, Form, Formik } from 'formik';
-import { Button, Card, CardContent, CircularProgress, Divider, Grid, makeStyles, Snackbar, Typography } from '@material-ui/core';
+import { Button, Card, CardContent, CircularProgress, Divider, Fade, Grid, makeStyles, Snackbar, Typography } from '@material-ui/core';
 import { TextField } from 'formik-mui';
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_RECIPE, UPDATE_RECIPE } from './services/mutations';
 import { Alert, Stack } from '@mui/material';
 import { checkExpiredToken } from '../../utils/checkExpiredToken';
 import RECIPE_DETAIL from './services/recipe_detail_query';
+import { storage } from '../../firebase';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { useDropzone } from 'react-dropzone';
 
 const useStyles = makeStyles((theme) => ({
 	errorColor: {
@@ -37,6 +40,9 @@ export const RecipeForm = () => {
 	const [fail, setFail] = useState(false);
 	const [success, setSuccess] = useState(false);
 	const [message, setMessage] = useState('');
+	const [progressPercent, setProgressPercent] = useState(0);
+	const [imageUrl, setImageUrl] = useState('');
+	const [waitingUploadImage, setWaitingUploadImage] = useState(false);
 
 	if (lastPath === 'edit') {
 		const {data} = useQuery(RECIPE_DETAIL, {
@@ -76,10 +82,16 @@ export const RecipeForm = () => {
 		setSuccess(false);
 	};
 
+	useEffect(() => {
+		setWaitingUploadImage(true);
+	}, [waitingUploadImage, imageUrl, progressPercent]);
+	
+
 	const handleCreateRecipe = async (setFail, values, token, dispatch, history) => {
 		setFail(false);
 
 		setTimeout(async () => {
+
 			createRecipe({
 				variables: {
 					input:{
@@ -193,6 +205,40 @@ export const RecipeForm = () => {
 		history.goBack();
 	};
 
+	const uploadImageToFirebase = (imageUrl) => {
+		const storageRef = ref(storage, `files/${new Date().getTime()}-${imageUrl.name}`);
+		const uploadTask = uploadBytesResumable(storageRef, imageUrl);
+		
+		uploadTask.on('state_changed',
+			(snapshot) => {
+				const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+				setProgressPercent(progress);
+			}, 
+			(error) => {
+				alert(error);
+			},
+			() => {
+				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+					setImageUrl(downloadURL);
+				});
+			});
+	};
+
+	const onDrop = useCallback(acceptedFiles => {
+		const file = acceptedFiles[0];
+		if(!file) return;
+
+		setImageUrl(Object.assign(file,{
+			preview: URL.createObjectURL(file)
+		}));
+
+		uploadImageToFirebase(file);
+	}, []);
+
+	const {getRootProps, getInputProps} = useDropzone({onDrop, multiple: false , accept: {
+		'image/*': ['.jpeg', '.png']
+	}});
+
 	const validationSchema = yup.object({
 		title: yup.string().trim().required('Title required.'),
 		image: yup.string().trim().required('Image required.'),
@@ -210,7 +256,7 @@ export const RecipeForm = () => {
 						loading ? <p>Loading...</p> : <Formik
 							initialValues={{
 								title: recipe.title ? recipe.title : '',
-								image: recipe.image ? recipe.image.url : '',
+								image: recipe.image ? recipe.image.url : 'no image uploaded',
 								servings: recipe.servings ? recipe.servings : '',
 								cookingTime: recipe.cookingTime ? recipe.cookingTime : '',
 								ingredients: recipe.ingredients ? recipe.ingredients.map(({ingredient}) => ingredient) : [],
@@ -219,11 +265,17 @@ export const RecipeForm = () => {
 							validationSchema={validationSchema}
 							onSubmit={async (values) => {
 								if (lastPath === 'edit') {
+									if(imageUrl !== '' || values.image !== 'no image uploaded'){
+										values.image = imageUrl;
+									}
 									handleUpdateRecipe(setFail, id, values, token, userDispatch, history);
 									setTimeout(() => {
 										history.goBack();
 									}, 2000);
 								}else{
+									if(imageUrl !== '' || values.image !== 'no image uploaded'){
+										values.image = imageUrl;
+									}
 									handleCreateRecipe(setFail, values, token, userDispatch, history);
 									setTimeout(() => {
 										history.goBack();
@@ -245,16 +297,42 @@ export const RecipeForm = () => {
 												component={TextField}
 												label='Title'
 												color='secondary'
-											></Field>
+											/>
 										</Grid>
 										<Grid item>
-											<Field 
-												fullWidth
-												name='image'
-												component={TextField}
-												label='Image'
-												color='secondary'
-											></Field>
+											<Fade in={error}>
+												<Field 
+													fullWidth
+													disabled={true}
+													name='image'
+													dateTime
+													component={TextField}
+													label='Image'
+													color='secondary'
+												/>
+											</Fade>
+										</Grid>
+										<Grid item>
+											<div {...getRootProps({
+												className: 'dropzone'
+											})}>
+												<input id='image' name='image' {...getInputProps()} />
+												<p>Drag & drop an image here, or click to select file</p>
+											</div>
+											{lastPath === 'edit' ? 
+											<div>
+												<img
+													src={imageUrl.preview ? imageUrl.preview : imageUrl !== '' ? imageUrl : recipe.image.url}
+													style={{width: '200px', borderRadius: '8px', marginTop: '10px'}}
+												/>
+											</div>
+											: <div>
+												<img
+													src={imageUrl.preview ? imageUrl.preview : imageUrl}
+													style={{width: '200px', borderRadius: '8px', marginTop: '10px'}}
+												/>
+											</div>		
+											}
 										</Grid>
 										<Grid item>
 											<Field 
@@ -263,7 +341,7 @@ export const RecipeForm = () => {
 												component={TextField}
 												label='Servings'
 												color='secondary'
-											></Field>
+											/>
 										</Grid>
 										<Grid item>
 											<Field 
@@ -272,7 +350,7 @@ export const RecipeForm = () => {
 												name='cookingTime'
 												component={TextField}
 												label='Cooking Time'
-											></Field>
+											/>
 										</Grid>
 										<FieldArray name='ingredients'>
 											{({push, remove}) => (
