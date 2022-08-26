@@ -265,10 +265,9 @@ export const RecipeForm = () => {
 								instructions: recipe.instructions ? recipe.instructions.map(({instruction}) => instruction) : []
 							}}
 							validationSchema={validationSchema}
-							onSubmit={async (values) => {
+							onSubmit={(values) => {
 								if (lastPath === 'edit') {
-									console.log('imagessss: ', imageUrl);
-									if(imageUrl !== '' || values.image !== 'no image uploaded'){
+									if(imageUrl !== ''){
 										values.image = imageUrl;
 									}
 									handleUpdateRecipe(setFail, id, values, token, userDispatch, history);
@@ -321,9 +320,16 @@ export const RecipeForm = () => {
 												<p>Drag & drop an image here, or click to select file</p>
 											</div>
 											{lastPath === 'edit' ? 
+											recipe.image?.url === 'no image uploaded' ? 
 											<div>
 												<img
-													src={imageUrl.preview ? imageUrl.preview : imageUrl !== '' ? imageUrl : recipe.image.url}
+													src={imageUrl.preview ? imageUrl.preview : imageUrl}
+													style={{width: '200px', borderRadius: '8px', marginTop: '10px'}}
+												/>
+											</div>		
+											: <div>
+												<img
+													src={imageUrl.preview ? imageUrl.preview : imageUrl !== '' ? imageUrl : recipe.image?.url}
 													style={{width: '200px', borderRadius: '8px', marginTop: '10px'}}
 												/>
 											</div>
