@@ -5,17 +5,17 @@ import './style.css';
 
 
 
-const PrimaryButton = (props) => {
+const PrimaryButtonNative = (props) => {
 	let history = useHistory();
 	return (
-		<button onClick={() => {history.push(props.href);}} className='btn primary'>{props.title}</button>
+		<button onClick={() => {history.push(props.href);}} className='btn default'>{props.title}</button>
 	);
 };
 
 const DefaultButton = (props) => {
 	return(
-		<button onClick={props.handlingEvents} className='btn default'>{props.title}</button>
+		<button onClick={props.handlingEvents} className='btn danger'>{props.title}</button>
 	);
 };
 
-export {PrimaryButton, DefaultButton};
+export {PrimaryButtonNative, DefaultButton};

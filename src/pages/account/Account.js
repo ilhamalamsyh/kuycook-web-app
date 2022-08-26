@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
-import { Avatar, Button, Dialog, DialogActions, DialogContentText, DialogTitle, List, ListItemButton, ListItemText, Typography } from '@mui/material';
-import { DefaultButton, PrimaryButton} from '../../components/Button/Button';
+import { Avatar, Dialog, DialogActions, DialogContentText, DialogTitle, List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material';
+import { DefaultButton } from '../../components/Button/Button';
 import { ArrowForwardIosRounded } from '@mui/icons-material';
 import { useHistory } from 'react-router-dom';
 import { useUserDispatch } from '../../context/UserContext';
@@ -10,9 +9,11 @@ import { useQuery } from '@apollo/client';
 import CURRENT_USER from '../auth/services/query';
 import { ErrorSnackbar } from '../../components/Snackbar/CustomizedSnackbars';
 import { checkExpiredToken } from '../../utils/checkExpiredToken';
-
+import { btnStyles } from '../../styles/MuiButtonStyle';
+import { Button } from '@material-ui/core';
 
 const Account = (props) => {
+	const classes = btnStyles();
 	let userDispatch = useUserDispatch();
 	const history = useHistory();
 	let token;
@@ -89,37 +90,44 @@ const Account = (props) => {
 						/>
 						<div style={{paddingLeft: 10,display: 'flex', flexDirection: 'column'}}>
 							<p style={{fontSize: '18px'}}>{content.fullname}</p>
-							<PrimaryButton title='Show Profile' href='/profile-detail'/>
+							<Button
+								classes={{text: classes.text}}
+								onClick={() => history.push('/profile-detail')}
+							>Show Profile</Button>
 						</div>
 					</div>
 					<div style={{marginTop: 50}}>
 						<List
 							dense
 						>
-							<ListItemButton onClick={redirectFavoritesPage}>
+							<ListItem>
+								<ListItemButton
+									divider={true} 
+									onClick={redirectFavoritesPage}>
+									<ListItemText 
+										primary={<Typography>Favorites</Typography>}
+									/>
+									<ArrowForwardIosRounded/>
+								</ListItemButton>
+							</ListItem>
+							<ListItemButton
+								divider={true}
+								onClick={redirectMyRecipesPage}>
 								<ListItemText 
 									disableTypography
-									primary={<Typography style={{color: 'white', fontWeight: 'bold'}}>Favorites</Typography>}
+									primary={<Typography>My Recipes</Typography>}
 								/>
 								<ArrowForwardIosRounded/>
 							</ListItemButton>
-							<hr />
-							<ListItemButton onClick={redirectMyRecipesPage}>
+							<ListItemButton 
+								divider={true}
+								onClick={redirectAboutPage}>
 								<ListItemText 
 									disableTypography
-									primary={<Typography style={{color: 'white', fontWeight: 'bold'}}>My Recipes</Typography>}
+									primary={<Typography>About</Typography>}
 								/>
 								<ArrowForwardIosRounded/>
 							</ListItemButton>
-							<hr />
-							<ListItemButton onClick={redirectAboutPage}>
-								<ListItemText 
-									disableTypography
-									primary={<Typography style={{color: 'white', fontWeight: 'bold'}}>About</Typography>}
-								/>
-								<ArrowForwardIosRounded/>
-							</ListItemButton>
-							<hr />
 						</List>
 						<div style={{paddingLeft: 17}}>
 							<DefaultButton title='Logout' handlingEvents={handleClickOpen}/>
@@ -156,37 +164,43 @@ const Account = (props) => {
 						/>
 						<div style={{paddingLeft: 10,display: 'flex', flexDirection: 'column'}}>
 							<p style={{fontSize: '18px'}}>{content.fullname}</p>
-							<PrimaryButton title='Show Profile' href='/profile-detail'/>
+							<Button
+								classes={{text: classes.text}}
+								onClick={() => history.push('/profile-detail')}
+							>Show Profile</Button>
 						</div>
 					</div>
 					<div style={{marginTop: 50}}>
 						<List
 							dense
 						>
-							<ListItemButton onClick={redirectFavoritesPage}>
+							<ListItemButton 
+								divider={true}
+								onClick={redirectFavoritesPage}>
 								<ListItemText 
 									disableTypography
-									primary={<Typography style={{color: 'white', fontWeight: 'bold'}}>Favorites</Typography>}
+									primary={<Typography>Favorites</Typography>}
 								/>
 								<ArrowForwardIosRounded/>
 							</ListItemButton>
-							<hr />
-							<ListItemButton onClick={redirectMyRecipesPage}>
+							<ListItemButton 
+								divider={true}
+								onClick={redirectMyRecipesPage}>
 								<ListItemText 
 									disableTypography
-									primary={<Typography style={{color: 'white', fontWeight: 'bold'}}>My Recipes</Typography>}
+									primary={<Typography>My Recipes</Typography>}
 								/>
 								<ArrowForwardIosRounded/>
 							</ListItemButton>
-							<hr />
-							<ListItemButton onClick={redirectAboutPage}>
+							<ListItemButton 
+								divider={true}
+								onClick={redirectAboutPage}>
 								<ListItemText 
 									disableTypography
-									primary={<Typography style={{color: 'white', fontWeight: 'bold'}}>About</Typography>}
+									primary={<Typography>About</Typography>}
 								/>
 								<ArrowForwardIosRounded/>
 							</ListItemButton>
-							<hr />
 						</List>
 						<div style={{paddingLeft: 17}}>
 							<DefaultButton title='Logout' handlingEvents={handleClickOpen}/>
@@ -198,7 +212,8 @@ const Account = (props) => {
 					<Dialog
 						PaperProps={{
 							style: {
-								backgroundColor: '#303a4d',
+								backgroundColor: 'white',
+								color: 'black',
 								boxShadow: 'none',
 							},
 						}}
@@ -208,17 +223,16 @@ const Account = (props) => {
 						aria-describedby="alert-dialog-description"
 					>
 						<DialogTitle id='alert-dialog-title'>
-							<DialogContentText id='alert-dialog-description' sx={{color: 'white'}}>Are you sure want to logout?</DialogContentText>
+							<DialogContentText id='alert-dialog-description' sx={{color: 'black'}}>Are you sure want to logout?</DialogContentText>
 						</DialogTitle>
 						<DialogActions>
-							<Button color='error' onClick={() => handleLogout(userDispatch, props.history)}>Yes</Button>
-							<Button color='primary' onClick={handleClickClose}>No</Button>
+							<Button onClick={() => handleLogout(userDispatch, props.history)}>Yes</Button>
+							<Button color='secondary' onClick={handleClickClose}>No</Button>
 						</DialogActions>
 					</Dialog>
 				</React.Fragment>
 			}
 		</React.Fragment>
-
 	);
 };
 

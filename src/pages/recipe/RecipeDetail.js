@@ -167,7 +167,7 @@ const RecipeDetail = () => {
 							</div>
 						</div>
 						<Typography 
-							style={{textAlign: 'center', paddingBottom: 5.0,fontWeight: 'bold'}} 
+							style={{color: '#b3bec6',textAlign: 'center', paddingBottom: 5.0,fontWeight: 'bold'}} 
 							variant='body2'>
 							Chef {data.recipeDetail.author.fullname}
 						</Typography>
@@ -180,16 +180,41 @@ const RecipeDetail = () => {
 						<p>Ingredients :</p>
 						<ul >
 							{data.recipeDetail.ingredients.map((i) => {
-								return <li key={i.id}>{i.ingredient}</li>;
+								return <>
+									<li key={i.id}>{i.ingredient}</li>
+									<Divider  
+										style={{
+											border: 'none',
+											borderTop: '1px dotted #b3bec6',
+											color: '#fff',
+											backgroundColor: '#fff',
+											height: '1px',
+											width: '95%'
+										}}
+									/>
+								</>;
 							})}
 						</ul>
+						
 					</div>
 					<div className='instructions-ingredients-content'>
 						<hr />
 						<p>Instructions :</p>
 						<ol >
 							{data.recipeDetail.instructions.map((i) => {
-								return <li key={i.id}>{i.instruction}</li>;
+								return <>
+									<li key={i.id}>{i.instruction}</li>
+									<Divider  
+										style={{
+											border: 'none',
+											borderTop: '1px dotted #b3bec6',
+											color: '#fff',
+											backgroundColor: '#fff',
+											height: '1px',
+											width: '95%'
+										}}
+									/>
+								</>;
 							})}
 						</ol>
 					</div>
