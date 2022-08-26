@@ -1,18 +1,19 @@
 /* eslint-disable react/prop-types */
 import { useMutation } from '@apollo/client';
 import { LockOutlined } from '@mui/icons-material';
-import { Alert, Avatar, Button, CircularProgress, Grid, Paper, Snackbar, Stack, TextField, Typography } from '@mui/material';
+import { Alert, Avatar, CardContent, CircularProgress, Grid, Snackbar, Stack, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { USER_LOGIN } from './services/mutations';
 import { useUserDispatch } from '../../context/UserContext';
 import { Box } from '@mui/system';
+import '../../components/Button/primaryButtonStyle.css';
+import { btnStyles } from '../../styles/MuiButtonStyle';
+import { Button, Card } from '@material-ui/core';
 
 const Login = (props) => {
-
-	const paperStyle = {padding: 20, height: '58vh', width: 280, margin: '20px auto', position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'};
-	const avatarStyle = {backgroundColor: '#FF10F0'};
-	const btnStyle = {margin: '8px 0'};
+	const classes = btnStyles();
+	const avatarStyle = {backgroundColor: '#71b9be'};
 	const marginBottomStyle = {marginBottom: 8};
 
 	const [error, setError] = useState(false);
@@ -67,30 +68,39 @@ const Login = (props) => {
 
 	return (
 		<React.Fragment>
-			<Grid>
-				<Paper elevation={50} style={paperStyle}>
-					<Grid align='center'>
-						<Avatar style={avatarStyle}>
-							<LockOutlined />
-						</Avatar>
-						<h2>Login</h2>
-					</Grid>
-					<TextField
-						id='email'
-						value={emailValue}
-						onChange={e => setEmailValue(e.target.value)}
-						color='secondary' variant='standard' label='Email' placeholder='Enter email' fullWidth required style={marginBottomStyle} />
-					<TextField
-						id='password'
-						value={passwordValue}
-						onChange={e => setPasswordValue(e.target.value)}
-						type={'password'} color='secondary' variant='standard' label='Password' placeholder='Enter password' fullWidth required style={marginBottomStyle} />
-					{isLoading ? (
+			<Grid
+				container
+				spacing={0}
+				direction="column"
+				alignItems="center"
+				justify="center"
+				style={{ minHeight: '100vh' }}
+			>
+				<Card>
+					<CardContent>
+						<Grid align='center'>
+							<Avatar style={avatarStyle}>
+								<LockOutlined />
+							</Avatar>
+							<h2>Login</h2>
+						</Grid>
+						<TextField
+							id='email'
+							value={emailValue}
+							onChange={e => setEmailValue(e.target.value)}
+							variant='standard' label='Email' placeholder='Enter email' fullWidth required style={marginBottomStyle} />
+						<TextField
+							id='password'
+							value={passwordValue}
+							onChange={e => setPasswordValue(e.target.value)}
+							type={'password'} variant='standard' label='Password' placeholder='Enter password' fullWidth required style={marginBottomStyle} />
+						{isLoading ? (
 					<Box sx={{display: 'flex', justifyContent: 'center'}}>
-						<CircularProgress size={26} color='secondary'/>
+						<CircularProgress size={26}/>
 					</Box>
 					) : (
 					<Button
+						classes={{ contained: classes.contained }}
 						disabled={emailValue.length === 0 || passwordValue.length === 0}
 						onClick={() => handleLoginAuth(
 							userDispatch,
@@ -100,20 +110,22 @@ const Login = (props) => {
 							setIsLoading,
 							setError
 						)}
-						type='submit' color='secondary' variant='contained'
-						style={btnStyle}
-						fullWidth>
+						type='submit'
+						variant='contained'
+						fullWidth
+					>
 						Log In
 					</Button>
-								)}
-					<Typography align='right' style={{ marginTop: '10px' }}>
-						<Link href='#'>Forgot password?</Link>
-					</Typography>
-					<Typography style={{ marginTop: '30px' }}>
+				)}
+						<Typography align='right' style={{ marginTop: '10px' }}>
+							<Link href='#'>Forgot password?</Link>
+						</Typography>
+						<Typography style={{ marginTop: '30px' }}>
 							Do not have an account? 
-						<Link to={'/signup'}> Sign Up</Link>
-					</Typography>
-				</Paper>
+							<Link to={'/signup'}> Sign Up</Link>
+						</Typography>
+					</CardContent>
+				</Card>
 			</Grid>
 			<Stack spacing={2} sx={{ width: '100%' }}>
 				<Snackbar

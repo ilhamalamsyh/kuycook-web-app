@@ -17,7 +17,7 @@ const SingleContent = ({
 
 	return (
 		<div onClick={() => history.push(`recipes/${id}`)} className='media'>
-			<Badge sx={{marginRight: 3.3}} badgeContent={cooking_time} color={cooking_time > 6 ? 'primary' : 'secondary'} />
+			<Badge sx={{marginRight: 3.3}} badgeContent={cooking_time} color={cooking_time > 6 ? 'secondary' : 'primary'} />
 			<img
 				className='image'
 				src={ image ? `${image}` : unavailable}

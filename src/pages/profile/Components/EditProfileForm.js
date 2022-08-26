@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { Alert, Button, CircularProgress, Grid, Paper, Snackbar, Stack, TextField } from '@mui/material';
+import { Alert, CircularProgress, Grid, Paper, Snackbar, Stack, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import * as yup from 'yup';
@@ -16,6 +16,8 @@ import { USER_UPDATE } from '../services/mutations';
 import { useUserDispatch } from '../../../context/UserContext';
 import { useHistory } from 'react-router-dom';
 import { checkExpiredToken } from '../../../utils/checkExpiredToken';
+import { btnStyles } from '../../../styles/MuiButtonStyle';
+import { Button } from '@material-ui/core';
 
 export const EditProfileForm = ({
 	id,
@@ -25,9 +27,8 @@ export const EditProfileForm = ({
 	birthDate
 }) => {
 	const paperStyle = {padding: 15, height: '78vh', width: 348, margin: '10px auto', position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'};
-	const btnStyle = {margin: '5px 0', fontWeight: 'bold'};
 	const marginBottomStyle = {marginBottom: '25px auto'};
-	const color = '#FF10F0';
+	const color = '#71b9be';
 
 	const customTheme = theme => {
 		return{
@@ -35,7 +36,7 @@ export const EditProfileForm = ({
 			colors: {
 				...theme.colors,
 				secondary: 'white',
-				primary: '#ad1897'
+				primary: '#71b9be'
 			}
 		};
 	};
@@ -55,6 +56,7 @@ export const EditProfileForm = ({
 	let token;
 	let userDispatch = useUserDispatch();
 	const history = useHistory();
+	const btnClasses = btnStyles();
 
 	const [userUpdate, {error}] = useMutation(USER_UPDATE);
 
@@ -180,7 +182,6 @@ export const EditProfileForm = ({
 							id='fullname'
 							name='fullname'
 							label='Fullname' 
-							color='secondary' 
 							variant='outlined' 
 							placeholder='Enter Fullname' 
 							fullWidth   
@@ -195,7 +196,6 @@ export const EditProfileForm = ({
 						<TextField 
 							id='email'
 							name='email'
-							color='secondary' 
 							variant='outlined' 
 							label='Email' 
 							placeholder='Enter email' 
@@ -253,7 +253,14 @@ export const EditProfileForm = ({
 								<CircularProgress size={26} color='secondary'/>
 							</Box>
 						) : (
-							<Button type='submit' color='secondary' variant='contained' style={btnStyle} fullWidth>Update</Button>
+							<Button
+								type='submit' 
+								classes={{contained: btnClasses.contained}}
+								variant='contained'
+								fullWidth
+							>
+							Update
+							</Button>
 						)
 						}
 					</form>

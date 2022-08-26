@@ -1,0 +1,8 @@
+.primary-button{
+    color: white;
+    text-transform: none;
+    background-color: #71b9be;
+    font-weight: bold;
+    border-radius: 20px;
+    margin: 8px 0;
+}

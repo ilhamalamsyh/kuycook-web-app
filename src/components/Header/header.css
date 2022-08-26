@@ -5,12 +5,12 @@
     display: flex;
     justify-content: center;
     text-transform: uppercase;
-    background-color: #39445a;
+    background-color: white;
     font-family: 'Roboto', sans-serif;
     font-size: 3vw;
     padding-bottom: 12px;
-    box-shadow: 0px 1px 5px black;
-    color: white;
+    box-shadow: 0px 1px 5px grey;
+    color: #0d2635;
     z-index: 100;
 }
 

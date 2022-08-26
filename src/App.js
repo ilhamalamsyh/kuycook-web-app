@@ -14,6 +14,7 @@ import RecipeDetail from './pages/recipe/RecipeDetail';
 import About from './pages/about/About';
 import Login from './pages/auth/Login';
 import SignUp from './pages/auth/SignUp';
+import {theme} from './styles/theme';
 
 import {
 	ApolloClient,
@@ -30,6 +31,7 @@ import {onError} from '@apollo/client/link/error';
 import { useUserDispatch, useUserState } from './context/UserContext';
 import { ProfileDetail } from './pages/profile/ProfileDetail';
 import { RecipeForm } from './pages/recipe/RecipeForm';
+import { ThemeProvider } from '@emotion/react';
 
 const errorLink = onError(({graphqlErrors, networkErrors}) => {
 	if (graphqlErrors) {
@@ -125,38 +127,40 @@ const App = () => {
 	return (
 		<ApolloProvider client={client}>
 			<BrowserRouter>
-				<Header/>
-				<div className="app">
-					<Container>
-						<Switch>
-							<Route exact path='/' component={Home} />
-							{/* <Route exact path='/recipes' component={Recipe} /> */}
-							<Route exact path='/login' component={Login} />
-							<Route exact path='/signup' component={SignUp} />
-							<PrivateRoute exact path='/recipes/create'>
-								<RecipeForm />
-							</PrivateRoute>
-							<PrivateRoute exact path='/recipes/:id/edit'>
-								<RecipeForm />
-							</PrivateRoute>
-							<Route exact path='/recipes/:id' component={RecipeDetail } />
-							<Route exact path='/profile-detail' component={ProfileDetail} />
-							{/* <PublicRoute path='login' component={Login}/> */}
-							{/* <Route path='/account' component={Account} />
+				<ThemeProvider theme={theme}>
+					<Header/>
+					<div className="app">
+						<Container>
+							<Switch>
+								<Route exact path='/' component={Home} />
+								{/* <Route exact path='/recipes' component={Recipe} /> */}
+								<Route exact path='/login' component={Login} />
+								<Route exact path='/signup' component={SignUp} />
+								<PrivateRoute exact path='/recipes/create'>
+									<RecipeForm />
+								</PrivateRoute>
+								<PrivateRoute exact path='/recipes/:id/edit'>
+									<RecipeForm />
+								</PrivateRoute>
+								<Route exact path='/recipes/:id' component={RecipeDetail } />
+								<Route exact path='/profile-detail' component={ProfileDetail} />
+								{/* <PublicRoute path='login' component={Login}/> */}
+								{/* <Route path='/account' component={Account} />
 							<Route path='/about' component={About} /> */}
-							<PrivateRoute path='/recipes'>
-								<Recipe />
-							</PrivateRoute>
-							<PrivateRoute path='/account'>
-								<Account />
-							</PrivateRoute>
-							<PrivateRoute path='/about'>
-								<About />
-							</PrivateRoute>
-						</Switch>
-					</Container>
-				</div>
-				<BottomNavBar/>
+								<PrivateRoute path='/recipes'>
+									<Recipe />
+								</PrivateRoute>
+								<PrivateRoute path='/account'>
+									<Account />
+								</PrivateRoute>
+								<PrivateRoute path='/about'>
+									<About />
+								</PrivateRoute>
+							</Switch>
+						</Container>
+					</div>
+					<BottomNavBar/>
+				</ThemeProvider>
 			</BrowserRouter>
 		</ApolloProvider>
 	);

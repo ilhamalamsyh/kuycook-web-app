@@ -13,6 +13,7 @@ import RECIPE_DETAIL from './services/recipe_detail_query';
 import { storage } from '../../firebase';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { useDropzone } from 'react-dropzone';
+import { btnStyles } from '../../styles/MuiButtonStyle';
 
 const useStyles = makeStyles((theme) => ({
 	errorColor: {
@@ -34,6 +35,7 @@ export const RecipeForm = () => {
 	const lastPath = url.pop();
 	const id = url[url.length - 1];
 	const classes = useStyles();
+	const btnClasses = btnStyles();
 
 	const [recipe, setRecipe] = useState({});
 	const [loading, setLoading] = useState(true);
@@ -265,6 +267,7 @@ export const RecipeForm = () => {
 							validationSchema={validationSchema}
 							onSubmit={async (values) => {
 								if (lastPath === 'edit') {
+									console.log('imagessss: ', imageUrl);
 									if(imageUrl !== '' || values.image !== 'no image uploaded'){
 										values.image = imageUrl;
 									}
@@ -285,7 +288,7 @@ export const RecipeForm = () => {
 						>
 							{({ values, errors, isSubmitting }) => (
 								<Form autoComplete='off'>
-									<Grid container direction='column' spacing={2}>
+									<Grid container direction='column' spacing={2} style={{paddingLeft: 10, paddingRight: 10}}>
 										<Grid item>
 											<Typography style={{fontWeight: 'bold'}} variant='body1'>Recipe Data</Typography>
 										</Grid>
@@ -296,7 +299,6 @@ export const RecipeForm = () => {
 												name='title'
 												component={TextField}
 												label='Title'
-												color='secondary'
 											/>
 										</Grid>
 										<Grid item>
@@ -308,7 +310,6 @@ export const RecipeForm = () => {
 													dateTime
 													component={TextField}
 													label='Image'
-													color='secondary'
 												/>
 											</Fade>
 										</Grid>
@@ -340,13 +341,11 @@ export const RecipeForm = () => {
 												name='servings'
 												component={TextField}
 												label='Servings'
-												color='secondary'
 											/>
 										</Grid>
 										<Grid item>
 											<Field 
 												fullWidth
-												color='secondary'
 												name='cookingTime'
 												component={TextField}
 												label='Cooking Time'
@@ -379,12 +378,12 @@ export const RecipeForm = () => {
 																		name={`ingredients[${index}]`}
 																		component={TextField}
 																		label='Ingredient'
-																		color='secondary'
 																	/>
 																</Grid>
 															</Grid>
 															<Grid item xs={12} sm='auto'>
 																<Button
+																	classes={{ text: btnClasses.text }}
 																	disabled={isSubmitting}
 																	onClick={() => remove(index)}
 																>Delete</Button>
@@ -400,9 +399,9 @@ export const RecipeForm = () => {
 
 													<Grid item>
 														<Button
+															classes={{ outlined: btnClasses.outlined }}
 															className='add-ingredient-instruction-btn'
 															variant='outlined'
-															color='secondary'
 															disabled={isSubmitting}
 															onClick={() => push('')}
 														>Add Ingredient</Button>
@@ -437,12 +436,12 @@ export const RecipeForm = () => {
 																		name={`instructions[${index}]`}
 																		component={TextField}
 																		label='Instruction'
-																		color='secondary'
 																	/>
 																</Grid>
 															</Grid>
 															<Grid item xs={12} sm='auto'>
 																<Button
+																	classes={{ text: btnClasses.text }}
 																	disabled={isSubmitting}
 																	onClick={() => remove(index)}
 																>Delete</Button>
@@ -458,9 +457,9 @@ export const RecipeForm = () => {
 
 													<Grid item>
 														<Button
+															classes={{ outlined: btnClasses.outlined }}
 															style={{textTransform: 'none'}}
 															variant='outlined'
-															color='secondary'
 															className='add-ingredient-instruction-btn'
 															disabled={isSubmitting}
 															onClick={() => push('')}
@@ -475,10 +474,10 @@ export const RecipeForm = () => {
 											{ lastPath === 'create' ? 
 									<Grid item>
 										<Button
+											classes={{ contained: btnClasses.contained }}
 											disabled={isSubmitting}
 											type='submit'
 											variant='contained'
-											color='secondary'
 											startIcon={
 												isSubmitting ? (
 													<CircularProgress size='0.9rem'/>
@@ -490,10 +489,10 @@ export const RecipeForm = () => {
 									</Grid> 
 									: <Grid item>
 										<Button
+											classes={{ contained: btnClasses.contained }}
 											disabled={isSubmitting}
 											type='submit'
 											variant='contained'
-											color='secondary'
 											startIcon={
 												isSubmitting ? (
 													<CircularProgress size='0.9rem'/>
@@ -505,7 +504,9 @@ export const RecipeForm = () => {
 									</Grid>
 											}
 											<Grid item>
-												<Button onClick={handleCancelButton}>
+												<Button 
+													classes={{ text: btnClasses.text }}
+													onClick={handleCancelButton}>
 											Cancel
 												</Button>
 											</Grid>

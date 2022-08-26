@@ -4,11 +4,10 @@
     font-size: 16px;
     cursor: pointer;
     display: flex;
-    text-decoration: underline;
   }
 
 .primary {color: #FF10F0}
 .info {color: dodgerblue;}
 .warning {color: orange;}
 .danger {color: red;}
-.default {color: white;}
+.default {color: black;}

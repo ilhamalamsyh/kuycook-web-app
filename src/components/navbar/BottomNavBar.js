@@ -25,7 +25,7 @@ const useStyles = makeStyles({
 		width:'100%',
 		position:'fixed',
 		bottom:0,
-		backgroundColor: '#303a4d',
+		backgroundColor: 'white',
 		zIndex:100
 	}
 });
@@ -58,15 +58,15 @@ const BottomNavBar = () => {
 			className={classes.root}
 		>
 			<BottomNavigationAction 
-				style={{color:'#ff10ef'}} 
+				style={{color:'#71b9be'}} 
 				label="Home" 
 				icon={<HomeRounded />} />
 			<BottomNavigationAction 
-				style={{color:'#ff10ef'}}  
+				style={{color:'#71b9be'}}  
 				label='Add' 
 				icon={<AddBoxRounded />} />
 			<BottomNavigationAction 
-				style={{color:'#ff10ef'}}  
+				style={{color:'#71b9be'}}  
 				label="Account" 
 				icon={<PersonRounded />} />
 		</BottomNavigation>
