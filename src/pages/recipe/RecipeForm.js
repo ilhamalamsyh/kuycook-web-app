@@ -486,11 +486,13 @@ export const RecipeForm = () => {
 											variant='contained'
 											startIcon={
 												isSubmitting ? (
-													<CircularProgress size='0.9rem'/>
+													<CircularProgress 
+														style={{color: '#71b9be'}}
+														size='0.9rem'/>
 												) : undefined
 											}
 										>
-											{isSubmitting ? 'Creating' : 'Create'}
+											{isSubmitting ? 'Creating...' : 'Create'}
 										</Button>
 									</Grid> 
 									: <Grid item>
@@ -501,11 +503,13 @@ export const RecipeForm = () => {
 											variant='contained'
 											startIcon={
 												isSubmitting ? (
-													<CircularProgress size='0.9rem'/>
+													<CircularProgress 
+														style={{color: '#71b9be'}} 
+														size='0.9rem'/>
 												) : undefined
 											}
 										>
-											{isSubmitting ? 'Updating' : 'Update'}
+											{isSubmitting ? 'Updating...' : 'Update'}
 										</Button>
 									</Grid>
 											}
