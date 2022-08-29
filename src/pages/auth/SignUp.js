@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { AppRegistrationRounded } from '@mui/icons-material';
-import { Alert, Avatar, CardContent, CircularProgress, Grid, Snackbar, Stack, TextField } from '@mui/material';
+// import { AppRegistrationRounded } from '@mui/icons-material';
+import { Alert, CardContent, CircularProgress, Grid, Snackbar, Stack, TextField } from '@mui/material';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import React, { useState } from 'react';
@@ -16,10 +16,17 @@ import { parseDateString } from '../../utils/parseDateString';
 import { TextError } from '../../components/TextError';
 import { btnStyles } from '../../styles/MuiButtonStyle';
 import { Button, Card } from '@material-ui/core';
+import Avatar from 'react-avatar-edit';
+import { storage } from '../../firebase';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { base64toFile } from '../../utils/convertBase64toFile';
+import { generateRandomString } from '../../utils/generateRandomString';
+
+// TODO: open stickies on mac to see todo's detail
 
 const SignUp = (props) => {
 	const classes = btnStyles();
-	const avatarStyle = {backgroundColor: '#71b9be', marginBottom: '0.1px auto'};
+	// const avatarStyle = {backgroundColor: '#71b9be', marginBottom: '0.1px auto'};
 	const btnStyle = {margin: '5px 0'};
 	const marginBottomStyle = {marginBottom: '25px auto'};
 	const color = '#71b9be';
@@ -45,11 +52,51 @@ const SignUp = (props) => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
 	const [errMsg, setErrMsg] = useState('');
+	const [src] = useState('');
+	const [selectedImage, setSelectedImage] = useState('');
+	const [imageUrl, setImageUrl] = useState('');
 	const genderOptions = [
 		{value: 'M', label: 'Male'},
 		{value: 'F', label: 'Female'}
 	];
 	const today = new Date();
+	const generateRandomImageName = generateRandomString(9);
+
+	const onClose = () => {
+		setSelectedImage('');
+	};
+
+	const onCrop = (preview) => {
+		const imgFile = base64toFile(preview, generateRandomImageName);
+		setSelectedImage(Object.assign(imgFile, {
+			preview: URL.createObjectURL(imgFile)
+		}));
+	};
+
+	const onBeforeFileLoad = (elem) => {
+		if (elem.target.files[0].size > 5168000) {
+			alert('File is too big!');
+			elem.target.value = '';
+		}
+	};
+
+	const handleImageUpload = (image) => {
+		const storageRef = ref(storage, `user_images/${new Date().getTime()}-${image.name}`);
+		const uploadTask = uploadBytesResumable(storageRef, image);
+
+		uploadTask.on('state_changed',
+			() => {
+				// const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+			},
+			(error) => {
+				alert(error);
+			},
+			() => {
+				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+					setImageUrl(downloadURL);
+				});
+			});
+	};
 
 	const validationSchema = yup.object({
 		fullname: yup.string().trim().min(8).required('Fullname required'),
@@ -73,7 +120,7 @@ const SignUp = (props) => {
 		setError(false);
 	};
 
-	const handleRegisterUser = async (dispatch, history, setLoading, setError, values) => {
+	const handleRegisterUser = async (dispatch, history, setLoading, setError, values, imgUrl) => {
 		setError(false);
 		setLoading(true);
 
@@ -85,10 +132,12 @@ const SignUp = (props) => {
 						email: values.email,
 						password: values.password,
 						gender: values.gender,
-						birthDate: values.birthDate
+						birthDate: values.birthDate,
+						image: imgUrl
 					}
 				}
 			}).then(res => {
+				localStorage.setItem('token', res.data.register.token);
 				localStorage.setItem('user', JSON.stringify(res.data));
 				setError(false);
 				setLoading(false);
@@ -118,7 +167,7 @@ const SignUp = (props) => {
 			birthDate: ''
 		},
 		onSubmit: (values) => {
-			handleRegisterUser(userDispatch, props.history, setLoading, setError, values);
+			handleRegisterUser(userDispatch, props.history, setLoading, setError, values, imageUrl);
 		},
 		validationSchema,
 		enableReinitialize: true
@@ -137,7 +186,6 @@ const SignUp = (props) => {
 				<Card style={{minWidth:'345px'}}>
 					<CardContent>
 						<Grid align='center'>
-							<Avatar style={avatarStyle}><AppRegistrationRounded/></Avatar>
 							<h2 style={{marginBottom: 0.2}}>Sign Up</h2>
 						</Grid>
 						<form 
@@ -149,6 +197,21 @@ const SignUp = (props) => {
 								gap: '0.5rem'   
 							}}
 						>
+							<div>
+								<Avatar 
+									width={300}
+									height={290}
+									onCrop={onCrop}
+									onClose={onClose}
+									onBeforeFileLoad={onBeforeFileLoad}
+									src={src}
+								/>
+								<img 
+									src={selectedImage.preview ? selectedImage.preview : imageUrl}
+									alt='Preview'
+								/>
+								{selectedImage ? <button onClick={() => handleImageUpload(selectedImage)}>Upload</button> : null}
+							</div>
 							<TextField 
 								id='fullname'
 								name='fullname'
@@ -272,4 +335,3 @@ const SignUp = (props) => {
 };
 
 export default SignUp;
-

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
@@ -58,6 +57,7 @@ export const ProfileDetail = () => {
 						email={content.email}
 						gender={content.gender}
 						birthDate={content.birthDate}
+						image={content.image}
 					/>
 				</React.Fragment>
 				: <EditProfileForm 
@@ -66,6 +66,7 @@ export const ProfileDetail = () => {
 					email={content.email}
 					gender={content.gender}
 					birthDate={content.birthDate}
+					image={content.image}
 				/>
 			}
 		</React.Fragment>

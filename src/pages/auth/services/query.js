@@ -8,6 +8,7 @@ const CURRENT_USER = gql`
         gender
         email
         birthDate
+        image
         createdAt
         updatedAt
         deletedAt

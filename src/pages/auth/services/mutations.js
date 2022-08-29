@@ -9,6 +9,7 @@ export const USER_LOGIN = gql`
             gender
             email
             birthDate
+            image
             createdAt
             updatedAt
             deletedAt
@@ -28,6 +29,7 @@ export const USER_REGISTER = gql`
             email
             gender
             birthDate
+            image
             createdAt
             updatedAt
             deletedAt
