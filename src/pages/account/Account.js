@@ -11,6 +11,7 @@ import { ErrorSnackbar } from '../../components/Snackbar/CustomizedSnackbars';
 import { checkExpiredToken } from '../../utils/checkExpiredToken';
 import { btnStyles } from '../../styles/MuiButtonStyle';
 import { Button } from '@material-ui/core';
+import user_icons_init_state from '../../assets/images/user.png';
 
 const Account = (props) => {
 	const classes = btnStyles();
@@ -85,7 +86,7 @@ const Account = (props) => {
 				<React.Fragment>
 					<ErrorSnackbar message={message}/>
 					<div style={{display: 'flex', justifyContent: 'center'}}>
-						<Avatar alt='profile image' src='https://img.okezone.com/content/2022/01/16/33/2532815/putus-dari-gigi-hadid-zayn-malik-gabung-aplikasi-kencan-online-D6gJjKZwDc.jpg'
+						<Avatar alt='profile image' src={content.image ? content.image : user_icons_init_state}
 							sx={{width: 100, height: 100, }}
 						/>
 						<div style={{paddingLeft: 10,display: 'flex', flexDirection: 'column'}}>
@@ -159,7 +160,7 @@ const Account = (props) => {
 				</React.Fragment>
 				: <React.Fragment>
 					<div style={{display: 'flex', justifyContent: 'center'}}>
-						<Avatar alt='profile image' src='https://img.okezone.com/content/2022/01/16/33/2532815/putus-dari-gigi-hadid-zayn-malik-gabung-aplikasi-kencan-online-D6gJjKZwDc.jpg'
+						<Avatar alt='profile image' src={content.image ? content.image : user_icons_init_state}
 							sx={{width: 100, height: 100, }}
 						/>
 						<div style={{paddingLeft: 10,display: 'flex', flexDirection: 'column'}}>
