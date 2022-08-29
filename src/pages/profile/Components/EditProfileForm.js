@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { Alert, CircularProgress, Grid, Paper, Snackbar, Stack, TextField } from '@mui/material';
+import { Alert, CardContent, CircularProgress, Grid, Snackbar, Stack, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
 import * as yup from 'yup';
@@ -17,16 +16,21 @@ import { useUserDispatch } from '../../../context/UserContext';
 import { useHistory } from 'react-router-dom';
 import { checkExpiredToken } from '../../../utils/checkExpiredToken';
 import { btnStyles } from '../../../styles/MuiButtonStyle';
-import { Button } from '@material-ui/core';
+import { Button, Card } from '@material-ui/core';
+import Avatar from 'react-avatar-edit';
+import { storage } from '../../../firebase';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { base64toFile } from '../../../utils/convertBase64toFile';
+import { generateRandomString } from '../../../utils/generateRandomString';
 
 export const EditProfileForm = ({
 	id,
 	fullname,
 	email,
 	gender,
-	birthDate
+	birthDate,
+	image
 }) => {
-	const paperStyle = {padding: 15, height: '78vh', width: 348, margin: '10px auto', position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'};
 	const marginBottomStyle = {marginBottom: '25px auto'};
 	const color = '#71b9be';
 
@@ -55,8 +59,47 @@ export const EditProfileForm = ({
 
 	let token;
 	let userDispatch = useUserDispatch();
+	const [selectedImage, setSelectedImage] = useState('');
+	const [imageUrl, setImageUrl] = useState('');
+	const [src] = useState('');
 	const history = useHistory();
 	const btnClasses = btnStyles();
+	const generateRandomImageName = generateRandomString(9);
+
+	const onClose = () => {
+		setSelectedImage('');
+	};
+
+	const onCrop = (preview) => {
+		const imgFile = base64toFile(preview, generateRandomImageName);
+		setSelectedImage(Object.assign(imgFile, {
+			preview: URL.createObjectURL(imgFile)
+		}));
+	};
+
+	const onBeforeFileLoad = (elem) => {
+		if (elem.target.files[0].size > 5168000) {
+			alert('File is too big!');
+			elem.target.value = '';
+		}
+	};
+
+	const handleImageUpload = (image) => {
+		const storageRef = ref(storage, `user_images/${new Date().getTime()}-${image.name}`);
+		const uploadTask = uploadBytesResumable(storageRef, image);
+
+		uploadTask.on('state_changed',
+			() => {
+			},
+			(error) => {
+				alert(error);
+			},
+			() => {
+				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+					setImageUrl(downloadURL);
+				});
+			});
+	};
 
 	const [userUpdate, {error}] = useMutation(USER_UPDATE);
 
@@ -86,7 +129,7 @@ export const EditProfileForm = ({
 		setSuccess(false);
 	};
 
-	const handleUserUpdate = async (setLoading, setError, values, token, dispatch, history) => {
+	const handleUserUpdate = async (setLoading, setError, values, token, dispatch, history, image) => {
 		setError(false);
 		setLoading(true);
         
@@ -98,10 +141,11 @@ export const EditProfileForm = ({
 						fullname: values.fullname,
 						email: values.email,
 						gender: values.gender,
-						birthDate: values.birthDate
+						birthDate: values.birthDate,
+						image
 					}
 				}
-			}).then(res => {
+			}).then(() => {
 				setError(false);
 				setLoading(false);
 				handleSnackBarClick(true, false);
@@ -159,7 +203,7 @@ export const EditProfileForm = ({
 			birthDate
 		},
 		onSubmit: (values) => {
-			handleUserUpdate(setLoading, setError, values, token, userDispatch, history);
+			handleUserUpdate(setLoading, setError, values, token, userDispatch, history, imageUrl);
 		},
 		validationSchema,
 		enableReinitialize: true
@@ -167,90 +211,118 @@ export const EditProfileForm = ({
 
 	return (
 		<React.Fragment>
-			<Grid sx={{overflowY: 'scroll', maxHeight: '200px'}} container spacing={2}>
-				<Paper elevation={10} style={paperStyle}>
-					<form 
-						onSubmit={formik.handleSubmit}
-						style={{
-							display: 'flex',
-							flexDirection: 'column',
-							paddingLeft: '10px',
-							gap: '1rem'   
-						}}
-					>
-						<TextField 
-							id='fullname'
-							name='fullname'
-							label='Fullname' 
-							variant='outlined' 
-							placeholder='Enter Fullname' 
-							fullWidth   
-							style={marginBottomStyle} 
-							onChange={formik.handleChange}
-							value={formik.values.fullname}
-							error={formik.touched.fullname && Boolean(formik.errors.fullname)}
-							helperText={formik.touched.fullname && formik.errors.fullname}
-							onBlur={formik.handleBlur}
-							focused={true}
-						/>
-						<TextField 
-							id='email'
-							name='email'
-							variant='outlined' 
-							label='Email' 
-							placeholder='Enter email' 
-							fullWidth 
-							style={marginBottomStyle} 
-							onChange={formik.handleChange}
-							value={formik.values.email}
-							error={formik.touched.email && Boolean(formik.errors.email)}
-							helperText={formik.touched.email && formik.errors.email}
-							onBlur={formik.handleBlur}
-							focused={true}
-						/>					
-						<Select
-							id='gender'
-							name='gender'
-							styles={selectStyles}
-							theme={customTheme}
-							options={genderOptions}
-							onChange={(gender) => {
-								formik.setFieldValue('gender', gender.value);
+			<Grid container
+				spacing={0}
+				direction="column"
+				alignItems="center"
+				justify="center"
+				style={{ minHeight: '100vh'}}
+			>
+				<Card style={{minWidth:'345px'}}>
+					<CardContent>
+						<form 
+							onSubmit={formik.handleSubmit}
+							style={{
+								display: 'flex',
+								flexDirection: 'column',
+								paddingLeft: '10px',
+								gap: '1rem'   
 							}}
-							value={genderOptions 
+						>
+							<div style={{
+								display: 'flex',
+								justifyContent: 'center',
+								flexDirection: 'column'
+							}}>
+								<Avatar 
+									width={300}
+									height={290}
+									onCrop={onCrop}
+									onClose={onClose}
+									onBeforeFileLoad={onBeforeFileLoad}
+									src={src}
+								/>
+								<img 
+									src={
+										selectedImage.preview ? selectedImage.preview : imageUrl ? imageUrl : image
+									}
+									alt='Preview'
+								/>
+								{selectedImage ? <button onClick={() => handleImageUpload(selectedImage)}>Upload</button> : null}
+							</div>
+							<TextField 
+								id='fullname'
+								name='fullname'
+								label='Fullname' 
+								variant='outlined' 
+								placeholder='Enter Fullname' 
+								fullWidth   
+								style={marginBottomStyle} 
+								onChange={formik.handleChange}
+								value={formik.values.fullname}
+								error={formik.touched.fullname && Boolean(formik.errors.fullname)}
+								helperText={formik.touched.fullname && formik.errors.fullname}
+								onBlur={formik.handleBlur}
+								focused={true}
+							/>
+							<TextField 
+								id='email'
+								name='email'
+								variant='outlined' 
+								label='Email' 
+								placeholder='Enter email' 
+								fullWidth 
+								style={marginBottomStyle} 
+								onChange={formik.handleChange}
+								value={formik.values.email}
+								error={formik.touched.email && Boolean(formik.errors.email)}
+								helperText={formik.touched.email && formik.errors.email}
+								onBlur={formik.handleBlur}
+								focused={true}
+							/>					
+							<Select
+								id='gender'
+								name='gender'
+								styles={selectStyles}
+								theme={customTheme}
+								options={genderOptions}
+								onChange={(gender) => {
+									formik.setFieldValue('gender', gender.value);
+								}}
+								value={genderOptions 
 							? genderOptions.find((gender) => gender.value === formik.values.gender) 
 							: ''}
-							isSearchable={false}
-							placeholder='Select Gender'
-						/>
-						<TextError message={formik.errors.gender}/>
-						<LocalizationProvider
-							dateAdapter={AdapterDateFns}>
-							<Stack>
-								<MobileDatePicker
-									maxDate={new Date(Date.now())}
-									label='Birth Date'
-									inputFormat='dd/MM/yyyy'
-									sx={{
-										svg: {color},
-										color: {color},
-										label: {color}
-									}}
-									value={formik.values.birthDate}
-									onChange={(date) => {
-										const selectedDate = formatDate(date.toDateString());
-										formik.setFieldValue('birthDate',selectedDate);
-									}}
-									renderInput={(params) => <TextField {...params} />}
-								/>
-							</Stack>
-						</LocalizationProvider>
-						<TextError message={formik.errors.birthDate}/>
-						<br style={{marginBottom: 2}}/>
-						{
+								isSearchable={false}
+								placeholder='Select Gender'
+							/>
+							<TextError message={formik.errors.gender}/>
+							<LocalizationProvider
+								dateAdapter={AdapterDateFns}>
+								<Stack>
+									<MobileDatePicker
+										maxDate={new Date(Date.now())}
+										label='Birth Date'
+										inputFormat='dd/MM/yyyy'
+										sx={{
+											svg: {color},
+											color: {color},
+											label: {color}
+										}}
+										value={formik.values.birthDate}
+										onChange={(date) => {
+											const selectedDate = formatDate(date.toDateString());
+											formik.setFieldValue('birthDate',selectedDate);
+										}}
+										renderInput={(params) => <TextField {...params} />}
+									/>
+								</Stack>
+							</LocalizationProvider>
+							<TextError message={formik.errors.birthDate}/>
+							<br style={{marginBottom: 2}}/>
+							{
 						loading ? (
 							<Box sx={{display: 'flex', justifyContent: 'center'}}>
-								<CircularProgress size={26} color='secondary'/>
+								<CircularProgress size={26}/>
 							</Box>
 						) : (
 							<Button
@@ -262,9 +334,10 @@ export const EditProfileForm = ({
 							Update
 							</Button>
 						)
-						}
-					</form>
-				</Paper>
+							}
+						</form>
+					</CardContent>
+				</Card>
 			</Grid>
 			{
 				error ? <Stack spacing={2} sx={{width: '100%'}}>
