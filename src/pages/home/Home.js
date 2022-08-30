@@ -16,6 +16,7 @@ const Home = () => {
 	let userDispatch = useUserDispatch();
 	const history = useHistory();
 	const [page, setPage] = useState(0);
+	const [totalPage, setTotalPage] = useState(0);
 	const [content, setContent] = useState([]);
 	const [message, setMessage] = useState('');
 	const {loading, error, data} = useQuery(RECIPE_LIST,{
@@ -46,7 +47,8 @@ const Home = () => {
 
 	useEffect(() => {
 		if (data) {
-			setContent(data);	
+			setContent(data.recipeList);	
+			setTotalPage(data.recipeList.meta.totalPage);
 		}
 		const timer = setTimeout(() => {
 			setLoadPage(false);
@@ -65,7 +67,7 @@ const Home = () => {
 					<span className='page-title'>Home</span>
 					<div className='home'>
 						{
-							content.recipeList && content.recipeList.map((c) => <SingleContent 
+							content.recipes && content.recipes.map((c) => <SingleContent 
 								key={c.id}
 								id={c.id}
 								title={c.title}
@@ -83,7 +85,7 @@ const Home = () => {
 					: <div>
 						<div className='home'>
 							{
-								content.recipeList && content.recipeList.map((c) => <SingleContent 
+								content.recipes && content.recipes.map((c) => <SingleContent 
 									key={c.id}
 									id={c.id}
 									title={c.title}
@@ -94,7 +96,7 @@ const Home = () => {
 								/>)
 							}
 						</div>
-						<CustomPagination setPage={setPage}/>
+						<CustomPagination setPage={setPage} numOfPages={totalPage}/>
 					</div>
 			} 
 		</>
