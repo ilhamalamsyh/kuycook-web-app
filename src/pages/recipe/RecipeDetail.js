@@ -10,7 +10,8 @@ import { checkExpiredToken } from '../../utils/checkExpiredToken';
 import RECIPE_DETAIL from './services/recipe_detail_query';
 import './styles/recipe.css';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Stack } from '@mui/material';
+import { Avatar, Stack } from '@mui/material';
+import user_icons_init_state from '../../assets/images/user.png';
 
 const recipeDetailMenus = [
 	'Share',
@@ -166,12 +167,35 @@ const RecipeDetail = () => {
 								</Menu>
 							</div>
 						</div>
-						<Typography 
-							style={{color: '#b3bec6',textAlign: 'center', paddingBottom: 5.0,fontWeight: 'bold'}} 
-							variant='body2'>
+						<div style={{display: 'flex'}}>
+							<Avatar
+								alt='profile image' src={data.recipeDetail.author.image ? data.recipeDetail.author.image : user_icons_init_state}
+								sx={{width: 50, height: 50, }}
+							/>
+							<div style={{paddingLeft: 10,display: 'flex', flexDirection: 'column'}}> 
+								<Typography 
+									style={{color: '#b3bec6', paddingBottom: 8.0, paddingTop: 5.0,fontWeight: 'bold'}} 
+									variant='body2'>
 							Chef {data.recipeDetail.author.fullname}
-						</Typography>
-						<Divider style={{margin: '0 auto', width: '50%', backgroundColor: 'white'}}/>
+								</Typography>
+								<Typography 
+									style={{color: '#b3bec6',fontWeight: 'bold'}} 
+									variant='body2'>
+									{data.recipeDetail.author.email}
+								</Typography>
+							</div>
+						</div>
+						<Divider  
+							style={{
+								border: 'none',
+								marginTop: '5px',
+								borderTop: '1px dotted #b3bec6',
+								color: '#fff',
+								backgroundColor: '#fff',
+								height: '1px',
+								width: '95%'
+							}}
+						/>
 						<Typography style={{marginTop:10}}>{data.recipeDetail.servings}</Typography>
 						<Typography>{data.recipeDetail.cookingTime}</Typography>
 					</div>
