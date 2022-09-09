@@ -1,8 +1,8 @@
 .media{
     display: flex;
     flex-direction: column;
-    width: 200px;
-    padding: 5px;
+    width: 500px;
+    padding: 2px;
     margin: 5px 0;
     background-color: white;
     border-radius: 10px;
@@ -17,7 +17,11 @@
 
 @media(max-width: 550px){
     .media{
-        width: 46%;
+        width: 47%;
+    }
+    .image{
+        height: 120px;
+        border-radius: 8px;
     }
 }
 
@@ -27,6 +31,7 @@
 
 .title{
     width: 100%;
+    margin-left: 5px;
     text-align: left;
     font-size: 17px;
     padding: 9px 0;
@@ -35,6 +40,7 @@
 
 .sub-title{
     display: flex;
+    margin-left: 5px;
     justify-content: space-between;
     padding-bottom: 3px;
     padding: 0 2px; 

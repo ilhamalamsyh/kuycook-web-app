@@ -121,7 +121,7 @@ const RecipeDetail = () => {
 							justifyContent: 'space-between',
 							marginBottom: '1rem'
 						}}>
-							<h2>{data.recipeDetail.title}</h2>
+							<Typography style={{fontSize: 35, fontWeight: 'bold'}}>{data.recipeDetail.title}</Typography>
 							<div style={{marginTop: 7.0}}>
 								<IconButton
 									aria-label="more"
