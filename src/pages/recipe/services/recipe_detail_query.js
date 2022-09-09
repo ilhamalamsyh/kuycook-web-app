@@ -14,6 +14,7 @@ const RECIPE_DETAIL = gql `
       fullname
       gender
       email
+      image
       birthDate
       createdAt
       updatedAt
