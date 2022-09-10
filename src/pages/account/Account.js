@@ -1,8 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
-import { Avatar, Dialog, DialogActions, DialogContentText, DialogTitle, List, ListItemButton, ListItemText, Typography } from '@mui/material';
-import { DefaultButton } from '../../components/Button/Button';
-import { ArrowForwardIosRounded } from '@mui/icons-material';
+import { Dialog, DialogActions, DialogContentText, DialogTitle, Typography } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import { useUserDispatch } from '../../context/UserContext';
 import { useQuery } from '@apollo/client';
@@ -10,9 +8,11 @@ import CURRENT_USER from '../auth/services/query';
 import { ErrorSnackbar } from '../../components/Snackbar/CustomizedSnackbars';
 import { checkExpiredToken } from '../../utils/checkExpiredToken';
 import { btnStyles } from '../../styles/MuiButtonStyle';
-import { Button, Card, CardContent } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import user_icons_init_state from '../../assets/images/user.png';
 import './styles/account_style.css';
+import { ProfileContentCard } from './components/ProfileContentCard';
+import { MenuButtonContentCard } from './components/MenuButtonContentCard';
 
 const Account = (props) => {
 	const classes = btnStyles();
@@ -86,58 +86,20 @@ const Account = (props) => {
 				error ? 
 				<React.Fragment>
 					<ErrorSnackbar message={message}/>
-					<div style={{display: 'flex', justifyContent: 'center'}}>
-						<Avatar alt='profile image' src={user_icons_init_state}
-							sx={{width: 100, height: 100, }}
-						/>
-						<div style={{paddingLeft: 10,display: 'flex', flexDirection: 'column'}}>
-							<p style={{fontSize: '18px'}}>{content.fullname}</p>
-							<Button
-								disabled={true}
-								classes={{text: classes.text}}
-								onClick={() => history.push('/profile-detail')}
-							>Show Profile</Button>
-						</div>
-					</div>
+					<ProfileContentCard
+						isDisabled={true}
+						userImage={content.image}
+						defaultImage={user_icons_init_state}
+						username={content.fullname}
+						style={classes.text}
+					/>
 					<div style={{marginTop: 50}}>
-						<Card className='glassmorphism_card'>
-							<CardContent>
-								<List
-									dense
-								>
-									<ListItemButton 
-										divider={true}
-										onClick={redirectFavoritesPage}>
-										<ListItemText 
-											disableTypography
-											primary={<Typography>Favorites</Typography>}
-										/>
-										<ArrowForwardIosRounded/>
-									</ListItemButton>
-									<ListItemButton 
-										divider={true}
-										onClick={redirectMyRecipesPage}>
-										<ListItemText 
-											disableTypography
-											primary={<Typography>My Recipes</Typography>}
-										/>
-										<ArrowForwardIosRounded/>
-									</ListItemButton>
-									<ListItemButton 
-										divider={true}
-										onClick={redirectAboutPage}>
-										<ListItemText 
-											disableTypography
-											primary={<Typography>About</Typography>}
-										/>
-										<ArrowForwardIosRounded/>
-									</ListItemButton>
-								</List>
-								<div style={{paddingLeft: 17}}>
-									<DefaultButton title='Logout' handlingEvents={handleClickOpen}/>
-								</div>
-							</CardContent>
-						</Card>
+						<MenuButtonContentCard 
+							directToAboutPage={redirectAboutPage}
+							directToFavoritePage={redirectFavoritesPage}
+							directToMyRecipePage={redirectMyRecipesPage}
+							logout={handleClickOpen}
+						/>
 						<center>
 							<p style={{marginTop: 90}}>v1.0.0</p>
 						</center>
@@ -164,67 +126,24 @@ const Account = (props) => {
 					</Dialog>
 				</React.Fragment>
 				: <React.Fragment>
-					<Card className='glassmorphism_card'>
-						<CardContent>
-							<div style={{display: 'flex', justifyContent: 'center'}}>
-								<Avatar alt='profile image' src={content.image ? content.image : user_icons_init_state}
-									sx={{width: 100, height: 100, }}
-								/>
-								<div style={{paddingLeft: 10,display: 'flex', flexDirection: 'column'}}>
-									<Typography style={{fontSize: '18px', paddingBottom: 20.0, paddingTop: 10.0}}>
-										{content.fullname}
-									</Typography>
-									<Button
-										classes={{text: classes.text}}
-										onClick={() => history.push('/profile-detail')}
-									>Show Profile</Button>
-								</div>
-							</div>
-						</CardContent>
-					</Card>
+					<ProfileContentCard
+						userImage={content.image}
+						defaultImage={user_icons_init_state}
+						username={content.fullname}
+						style={classes.text}
+					/>
 					<div style={{marginTop: 50}}>
-						<Card className='glassmorphism_card'>
-							<CardContent>
-								<List
-									dense
-								>
-									<ListItemButton 
-										divider={true}
-										onClick={redirectFavoritesPage}>
-										<ListItemText 
-											disableTypography
-											primary={<Typography>Favorites</Typography>}
-										/>
-										<ArrowForwardIosRounded/>
-									</ListItemButton>
-									<ListItemButton 
-										divider={true}
-										onClick={redirectMyRecipesPage}>
-										<ListItemText 
-											disableTypography
-											primary={<Typography>My Recipes</Typography>}
-										/>
-										<ArrowForwardIosRounded/>
-									</ListItemButton>
-									<ListItemButton 
-										divider={true}
-										onClick={redirectAboutPage}>
-										<ListItemText 
-											disableTypography
-											primary={<Typography>About</Typography>}
-										/>
-										<ArrowForwardIosRounded/>
-									</ListItemButton>
-								</List>
-								<div style={{paddingLeft: 17}}>
-									<DefaultButton title='Logout' handlingEvents={handleClickOpen}/>
-								</div>
-							</CardContent>
-						</Card>
-						
-						<center>
-							<p style={{marginTop: 90}}>v1.0.0</p>
-						</center>
+						<MenuButtonContentCard 
+							directToAboutPage={redirectAboutPage}
+							directToFavoritePage={redirectFavoritesPage}
+							directToMyRecipePage={redirectMyRecipesPage}
+							logout={handleClickOpen}
+						/>
+						<Typography style={{
+							textAlign:'center', 
+							marginTop: 'calc(10% + 45px)'}}>
+							v1.0.0
+						</Typography>
 					</div>
 					<Dialog
 						PaperProps={{
