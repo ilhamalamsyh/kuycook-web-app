@@ -1,0 +1,39 @@
+.death{
+    background: #ff5859;
+    border-radius: 5px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8.7px);
+    -webkit-backdrop-filter: blur(8.7px);
+    color: white;
+    padding: 7px;
+}
+
+.confirmed{
+    background: #feb25a;
+    border-radius: 5px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8.7px);
+    -webkit-backdrop-filter: blur(8.7px);
+    color: white;
+    padding: 7px;
+}
+
+.recovered{
+    background: #4bd979;
+    border-radius: 5px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8.7px);
+    -webkit-backdrop-filter: blur(8.7px);
+    color: white;
+    padding: 7px;
+}
+
+.new_cases{
+    background: #4ab4fe;
+    border-radius: 5px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8.7px);
+    -webkit-backdrop-filter: blur(8.7px);
+    color: white;
+    padding: 7px;
+}
