@@ -13,7 +13,7 @@ import { Button, Card } from '@material-ui/core';
 
 const Login = (props) => {
 	const classes = btnStyles();
-	const avatarStyle = {backgroundColor: '#71b9be'};
+	const avatarStyle = {backgroundColor: '#246923', color: '#ffe77aff'};
 	const marginBottomStyle = {marginBottom: 8};
 
 	const [error, setError] = useState(false);
@@ -96,7 +96,7 @@ const Login = (props) => {
 							type={'password'} variant='standard' label='Password' placeholder='Enter password' fullWidth required style={marginBottomStyle} />
 						{isLoading ? (
 					<Box sx={{display: 'flex', justifyContent: 'center'}}>
-						<CircularProgress size={26}/>
+						<CircularProgress color='secondary' size={26}/>
 					</Box>
 					) : (
 					<Button

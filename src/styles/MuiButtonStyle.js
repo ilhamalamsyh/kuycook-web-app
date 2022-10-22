@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export const btnStyles = makeStyles({
 	contained: {
-		backgroundColor: '#71b9be',
+		backgroundColor: '#246923',
 		borderRadius: 20,
 		margin: '8px 0',
 		textTransform: 'none',
@@ -10,16 +10,16 @@ export const btnStyles = makeStyles({
 		paddingRight: 25,
 		paddingTop: 5,
 		paddingBottom: 5,
-		color: 'white',
+		color: '#ffe77aff',
 		'&:hover': {
-			backgroundColor: '#71b9be',
+			backgroundColor: '#246923',
 		},
 	},
 	outlined: {
 		borderRadius: 20,
 		margin: '8px 0',
 		textTransform: 'none',
-		color: '#0d2635',
+		color: '#246923',
 	},
 	text: {
 		borderRadius: 20,
