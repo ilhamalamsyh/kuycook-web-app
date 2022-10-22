@@ -29,7 +29,7 @@ const SignUp = (props) => {
 	// const avatarStyle = {backgroundColor: '#71b9be', marginBottom: '0.1px auto'};
 	const btnStyle = {margin: '5px 0'};
 	const marginBottomStyle = {marginBottom: '25px auto'};
-	const color = '#71b9be';
+	const color = '#246923';
 
 	const customTheme = theme => {
 		return{
@@ -37,7 +37,7 @@ const SignUp = (props) => {
 			colors: {
 				...theme.colors,
 				secondary: 'white',
-				primary: '#71b9be'
+				primary: '#246923'
 			}
 		};
 	};
@@ -299,7 +299,7 @@ const SignUp = (props) => {
 							{
 						loading ? (
 							<Box sx={{display: 'flex', justifyContent: 'center'}}>
-								<CircularProgress size={26} />
+								<CircularProgress color='secondary' size={26} />
 							</Box>
 						) : (
 							<Button 

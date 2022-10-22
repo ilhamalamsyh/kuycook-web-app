@@ -101,7 +101,7 @@ const Account = (props) => {
 							logout={handleClickOpen}
 						/>
 						<center>
-							<p style={{marginTop: 90}}>v1.0.0</p>
+							<p style={{marginTop: 90}}>v2.0.0</p>
 						</center>
 					</div>
 					<Dialog
@@ -142,7 +142,7 @@ const Account = (props) => {
 						<Typography style={{
 							textAlign:'center', 
 							marginTop: 'calc(10% + 45px)'}}>
-							v1.0.0
+							v2.0.0
 						</Typography>
 					</div>
 					<Dialog

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useUserDispatch } from '../../context/UserContext';
 import * as yup from 'yup';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -25,6 +25,34 @@ const useStyles = makeStyles((theme) => ({
 		},
 	},
 }));
+
+const baseStyle = {
+	flex: 1,
+	display: 'flex',
+	flexDirection: 'column',
+	alignItems: 'center',
+	padding: '20px',
+	borderWidth: 2,
+	borderRadius: 2,
+	borderColor: '#246923',
+	borderStyle: 'dashed',
+	backgroundColor: '#fafafa',
+	color: '#bdbdbd',
+	outline: 'none',
+	transition: 'border .24s ease-in-out'
+};
+  
+const focusedStyle = {
+	borderColor: '#ffe77aff'
+};
+  
+const acceptStyle = {
+	borderColor: '#ffe77aff'
+};
+  
+const rejectStyle = {
+	borderColor: '#ffe77aff'
+};
 
 export const RecipeForm = () => {
 	let token;
@@ -237,9 +265,25 @@ export const RecipeForm = () => {
 		uploadImageToFirebase(file);
 	}, []);
 
-	const {getRootProps, getInputProps} = useDropzone({onDrop, multiple: false , accept: {
+	const {
+		getRootProps, 
+		getInputProps,
+		isFocused,
+		isDragAccept,
+		isDragReject
+	} = useDropzone({onDrop, multiple: false , accept: {
 		'image/*': ['.jpeg', '.png']
 	}});
+	const style = useMemo(() => ({
+		...baseStyle,
+		...(isFocused ? focusedStyle : {}),
+		...(isDragAccept ? acceptStyle : {}),
+		...(isDragReject ? rejectStyle : {})
+	}), [
+		isFocused,
+		isDragAccept,
+		isDragReject
+	]);
 
 	const validationSchema = yup.object({
 		title: yup.string().trim().required('Title required.'),
@@ -314,7 +358,7 @@ export const RecipeForm = () => {
 										</Grid>
 										<Grid item>
 											<div {...getRootProps({
-												className: 'dropzone'
+												style
 											})}>
 												<input id='image' name='image' {...getInputProps()} />
 												<p>Drag & drop an image here, or click to select file</p>
@@ -487,7 +531,7 @@ export const RecipeForm = () => {
 											startIcon={
 												isSubmitting ? (
 													<CircularProgress 
-														style={{color: '#71b9be'}}
+														style='secondary'
 														size='0.9rem'/>
 												) : undefined
 											}
@@ -504,7 +548,7 @@ export const RecipeForm = () => {
 											startIcon={
 												isSubmitting ? (
 													<CircularProgress 
-														style={{color: '#71b9be'}} 
+														style='secondary' 
 														size='0.9rem'/>
 												) : undefined
 											}

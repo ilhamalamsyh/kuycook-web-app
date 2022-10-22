@@ -9,11 +9,12 @@ export const MenuButtonContentCard = ({directToFavoritePage, directToMyRecipePag
 		<Card 
 			className='glassmorphism_card' 
 			style={{
-				background: 'rgba(113, 185, 190, 0.39)',
+				background: 'rgba(36, 105, 35, 0.52)',
 				borderRadius: '15px',
 				boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
-				backdropFilter: 'blur(6.4px)',
-				border: '1px solid rgba(255, 255, 255, 0.21)'
+				backdropFilter: 'blur(3.6px)',
+				'-webkit-backdrop-filter': 'blur(3.6px)',
+				border: '1px solid rgba(36, 105, 35, 0.2)'
 			}}>
 			<CardContent>
 				<List

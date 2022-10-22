@@ -32,7 +32,7 @@ export const EditProfileForm = ({
 	image
 }) => {
 	const marginBottomStyle = {marginBottom: '25px auto'};
-	const color = '#71b9be';
+	const color = '#246923';
 
 	const customTheme = theme => {
 		return{
@@ -40,7 +40,7 @@ export const EditProfileForm = ({
 			colors: {
 				...theme.colors,
 				secondary: 'white',
-				primary: '#71b9be'
+				primary: '#246923'
 			}
 		};
 	};
@@ -322,7 +322,7 @@ export const EditProfileForm = ({
 							{
 						loading ? (
 							<Box sx={{display: 'flex', justifyContent: 'center'}}>
-								<CircularProgress size={26}/>
+								<CircularProgress color='secondary' size={26}/>
 							</Box>
 						) : (
 							<Button
