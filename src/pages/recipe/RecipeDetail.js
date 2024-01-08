@@ -41,7 +41,6 @@ const RecipeDetail = () => {
 			id
 		}
 	});
-	const [loadPage, setLoadPage] = useState(loading);
 
 	const errorHandling = async(error) => {
 		setMessage('Something went wrong....');
@@ -62,9 +61,6 @@ const RecipeDetail = () => {
 	};
 
 	useEffect(async () => {
-		const timer = setTimeout(async () => {
-			await setLoadPage(false);
-		}, 1000);
 		if (error) {
 			return errorHandling(error);
 		}
@@ -74,8 +70,6 @@ const RecipeDetail = () => {
 		}else if(currentUserId.login.user.id === data.recipeDetail.author.id){
 			setIsEditable(true);
 		}
-		
-		return () => clearTimeout(timer);
 	},[data, error]);
 	
 	const handleClick = (event) => {
@@ -107,7 +101,7 @@ const RecipeDetail = () => {
 	return (
 		<React.Fragment>
 			{
-				loadPage ? <LoadingDetailPage/>
+				loading ? <LoadingDetailPage/>
 				: error ? <ErrorSnackbar message={message}/> 
 				:  <div className='detail-content'>
 					<img
