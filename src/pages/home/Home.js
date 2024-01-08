@@ -9,9 +9,6 @@ import { ErrorSnackbar } from '../../components/Snackbar/CustomizedSnackbars';
 import { checkExpiredToken } from '../../utils/checkExpiredToken';
 import { useUserDispatch } from '../../context/UserContext';
 import { useHistory } from 'react-router-dom';
-// import { Covid19InfoSection } from './components/Covid19InfoSection';
-// import { getIndonesianCovid19Data } from './service/service_rest_api';
-// import { convertNumberToDecimal } from '../../utils/convertNumberToDecimal';
 
 const Home = () => {
 	let token;
@@ -21,7 +18,6 @@ const Home = () => {
 	const [totalPage, setTotalPage] = useState(0);
 	const [content, setContent] = useState([]);
 	const [message, setMessage] = useState('');
-	// const [covid19Data, setCovid19Data] = useState({});
 	const {loading, error, data} = useQuery(RECIPE_LIST,{
 		variables: {
 			page
